@@ -58,7 +58,7 @@ export default function Navbar() {
           {[
             'Home',
             'Wardrobe',
-            'Modular Kitchen', // This will be handled with non-breaking space
+            'Kitchen', // This will be handled with non-breaking space
             'Services',
             'Gallery',
             'About',
