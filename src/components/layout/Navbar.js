@@ -19,11 +19,9 @@ export default function Navbar() {
   /* -------------------------------------------------- dropdown data */
   const menuData = {
     'Wardrobe': [
-      { id: 1, title: 'Walk-in Wardrobes', image: '/images/wardrobe-1.jpg', href: '/wardrobe/walk-in' },
-      { id: 2, title: 'Sliding Door Wardrobes', image: '/images/wardrobe-2.jpg', href: '/wardrobe/sliding' },
-      { id: 3, title: 'Hinged Wardrobes', image: '/images/wardrobe-3.jpg', href: '/wardrobe/hinged' },
-      { id: 4, title: 'Custom Wardrobes', image: '/images/wardrobe-4.jpg', href: '/wardrobe/custom' },
-      { id: 5, title: 'Kids Wardrobes', image: '/images/wardrobe-5.jpg', href: '/wardrobe/kids' },
+      { id: 1, title: 'Classical Wardrobes', image: '/images/wardrobe-1.jpg', href: '/wardrobe/walk-in' },
+      { id: 2, title: 'Modern Wardrobes', image: '/images/wardrobe-2.jpg', href: '/wardrobe/sliding' },
+      { id: 3, title: 'Neo-Classical Wardrobes', image: '/images/wardrobe-3.jpg', href: '/wardrobe/hinged' },
     ],
     'Kitchen': [
       { id: 1, title: 'Modular Kitchen', image: '/images/kitchen-1.jpg', href: '/kitchen/modular' },
