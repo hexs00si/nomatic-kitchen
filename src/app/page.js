@@ -8,6 +8,8 @@ export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef(null)
+  const contentRef = useRef(null) // Ref for content container
+  const idle = useRef(null) // Idle timeout reference
 
   // Video data with placeholder URLs
   const videos = [
@@ -49,6 +51,40 @@ export default function Home() {
       setProgress(0)
     }
   }
+
+  // Idle fade functionality - similar to navbar
+  useEffect(() => {
+    const reveal = () => {
+      if (contentRef.current) {
+        contentRef.current.style.opacity = '1'
+        contentRef.current.style.transform = 'translateY(0)'
+        clearTimeout(idle.current)
+        idle.current = setTimeout(() => {
+          if (contentRef.current) {
+            contentRef.current.style.opacity = '0'
+            contentRef.current.style.transform = 'translateY(20px)'
+          }
+        }, 3_000)
+      }
+    }
+
+    // Add event listeners for user activity
+    window.addEventListener('mousemove', reveal)
+    window.addEventListener('scroll', reveal)
+    window.addEventListener('keydown', reveal)
+    window.addEventListener('touchstart', reveal)
+    window.addEventListener('click', reveal)
+    reveal() // Initial call
+
+    return () => {
+      window.removeEventListener('mousemove', reveal)
+      window.removeEventListener('scroll', reveal)
+      window.removeEventListener('keydown', reveal)
+      window.removeEventListener('touchstart', reveal)
+      window.removeEventListener('click', reveal)
+      clearTimeout(idle.current)
+    }
+  }, [])
 
   // Main effect for video management - runs whenever currentVideo changes
   useEffect(() => {
@@ -122,7 +158,7 @@ export default function Home() {
       video.removeEventListener('play', handlePlay)
       video.removeEventListener('error', handleError)
     }
-  }, [currentVideo]) // Only depend on currentVideo
+  }, [currentVideo])
 
   return (
     <main className="relative overflow-hidden">
@@ -145,8 +181,11 @@ export default function Home() {
         {/* Video Overlay for Better Text Readability */}
         <div className="absolute inset-0 bg-black/30 z-10" />
 
-        {/* Main Content Container */}
-        <div className="relative z-20 min-h-screen flex flex-col justify-end px-8 lg:px-16 pb-20 lg:pb-12">
+        {/* Main Content Container - with fade functionality */}
+        <div 
+          ref={contentRef}
+          className="relative z-20 min-h-screen flex flex-col justify-end px-8 lg:px-16 pb-20 lg:pb-12 transition-all duration-500 ease-out"
+        >
           
           {/* Top Content Row - Main heading and right content */}
           <div className="flex items-end justify-between mb-4">
@@ -256,7 +295,7 @@ export default function Home() {
           </div>
 
           {/* Debug Info - Development only */}
-          {process.env.NODE_ENV === 'development' && (
+          {/* {process.env.NODE_ENV === 'development' && (
             <div className="fixed top-20 right-4 bg-black/90 text-white p-4 rounded-lg text-sm font-mono backdrop-blur">
               <div className="space-y-1">
                 <div>Current Video: {currentVideo + 1}/{videos.length}</div>
@@ -267,7 +306,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
