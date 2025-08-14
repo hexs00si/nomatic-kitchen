@@ -219,7 +219,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={toggle}
-              className="rounded-full bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
+              className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
             >
               Contact
             </a>
@@ -230,7 +230,7 @@ export default function Navbar() {
       {/* DESKTOP NAVIGATION */}
       <div 
         ref={containerRef}
-        className="hidden lg:block fixed top-6 left-1/2 z-40 transition-all duration-500 ease-out"
+        className="hidden lg:flex-row lg:flex w-[57rem] lg:flex-wrap fixed top-6 left-1/2 z-40 transition-all duration-500 ease-out"
         style={{ transform: 'translateX(-50%)' }}
         onMouseLeave={handleMouseLeave}
       >
@@ -268,7 +268,7 @@ export default function Navbar() {
 
           <a
             href="#contact"
-            className="ml-8 rounded-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
+            className="ml-8 rounded-lg h-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
           >
             Contact
           </a>
@@ -321,17 +321,47 @@ export default function Navbar() {
                   <a
                     key={subItem.id}
                     href={subItem.href}
-                    className="flex-shrink-0 w-64 group cursor-pointer"
+                    className="flex-shrink-0 w-80 group cursor-pointer"
                   >
-                    <div className="bg-white/5 hover:bg-white/10 rounded-lg p-4 transition-all duration-300 border border-white/10 hover:border-white/20 hover:shadow-lg">
-                      <div className="aspect-video rounded-lg overflow-hidden mb-3 bg-gray-400">
-                        <div className="w-full h-full flex items-center justify-center text-gray-600 text-sm">
-                          {subItem.title}
+                    <div className="relative h-72 rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                      {/* Background Image */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center bg-gray-600 transition-transform duration-300 group-hover:scale-110"
+                        style={{ backgroundImage: `url(${subItem.image})` }}
+                      />
+                      
+                      {/* Overlay Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      
+                      {/* Content Container */}
+                      <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                        <div className="flex items-end justify-between">
+                          {/* Left Side - Title and Description */}
+                          <div className="flex-1 mr-4">
+                            <h3 className="text-white font-semibold text-sm mb-1 leading-tight">
+                              {subItem.title}
+                            </h3>
+                            <p className="text-white/70 text-xs leading-tight">
+                              Explore our premium {subItem.title.toLowerCase()} collection
+                            </p>
+                          </div>
+                          
+                          {/* Right Side - Action Button */}
+                          <div className="flex-shrink-0">
+                            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-200 p-4">
+                              <svg 
+                                className="w-8 h-8 text-white transition-transform duration-200 group-hover:scale-110" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                              </svg>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <h3 className="text-white font-medium text-sm group-hover:text-white/80 transition-colors duration-200 text-center">
-                        {subItem.title}
-                      </h3>
                     </div>
                   </a>
                 ))}
