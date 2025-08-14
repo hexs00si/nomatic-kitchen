@@ -1,16 +1,15 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Navbar from '@/components/layout/Navbar'
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
   const [progress, setProgress] = useState(0)
   const videoRef = useRef(null)
-  const progressIntervalRef = useRef(null)
 
-  // Video data with placeholder URLs (replace with your actual video URLs)
+  // Video data with placeholder URLs
   const videos = [
     {
       id: 1,
@@ -34,48 +33,96 @@ export default function Home() {
     }
   ]
 
-  // Update progress based on video time
+  // Auto-advance to next video
+  const goToNextVideo = () => {
+    const nextIndex = (currentVideo + 1) % videos.length
+    console.log(`Switching from video ${currentVideo + 1} to video ${nextIndex + 1}`)
+    setCurrentVideo(nextIndex)
+    setProgress(0)
+  }
+
+  // Handle manual video switch
+  const handleVideoSwitch = (index) => {
+    if (index !== currentVideo) {
+      console.log(`Manual switch to video ${index + 1}`)
+      setCurrentVideo(index)
+      setProgress(0)
+    }
+  }
+
+  // Main effect for video management - runs whenever currentVideo changes
   useEffect(() => {
     const video = videoRef.current
-    if (!video) return
+    if (!video) {
+      console.log('No video element found')
+      return
+    }
 
-    const updateProgress = () => {
+    console.log(`Setting up video ${currentVideo + 1}`)
+    
+    // Set the video source
+    video.src = videos[currentVideo].src
+    video.poster = videos[currentVideo].poster
+    
+    // Reset states
+    setProgress(0)
+
+    // Event handlers
+    const handleLoadedData = () => {
+      console.log(`Video ${currentVideo + 1} loaded, duration: ${video.duration}s`)
+      video.play().catch(error => {
+        console.error('Play failed:', error)
+      })
+    }
+
+    const handleTimeUpdate = () => {
       if (video.duration > 0) {
         const progressPercent = (video.currentTime / video.duration) * 100
         setProgress(progressPercent)
       }
     }
 
-    const handleVideoEnd = () => {
-      // Auto-advance to next video when current one ends
-      setCurrentVideo((prev) => (prev + 1) % videos.length)
-      setProgress(0)
+    const handleEnded = () => {
+      console.log(`Video ${currentVideo + 1} ended - advancing to next`)
+      setProgress(100)
+      // Small delay before switching
+      setTimeout(() => {
+        goToNextVideo()
+      }, 200)
     }
 
-    video.addEventListener('timeupdate', updateProgress)
-    video.addEventListener('ended', handleVideoEnd)
+    const handlePlay = () => {
+      console.log(`Video ${currentVideo + 1} started playing`)
+    }
 
+    const handleError = (e) => {
+      console.error(`Video ${currentVideo + 1} error:`, e.target.error)
+      // Auto-advance on error
+      setTimeout(() => {
+        goToNextVideo()
+      }, 1000)
+    }
+
+    // Add event listeners
+    video.addEventListener('loadeddata', handleLoadedData)
+    video.addEventListener('timeupdate', handleTimeUpdate)
+    video.addEventListener('ended', handleEnded)
+    video.addEventListener('play', handlePlay)
+    video.addEventListener('error', handleError)
+
+    // Load the video
+    video.load()
+
+    // Cleanup function
     return () => {
-      video.removeEventListener('timeupdate', updateProgress)
-      video.removeEventListener('ended', handleVideoEnd)
+      console.log(`Cleaning up video ${currentVideo + 1}`)
+      video.removeEventListener('loadeddata', handleLoadedData)
+      video.removeEventListener('timeupdate', handleTimeUpdate)
+      video.removeEventListener('ended', handleEnded)
+      video.removeEventListener('play', handlePlay)
+      video.removeEventListener('error', handleError)
     }
-  }, [currentVideo, videos.length])
-
-  // Handle video switching
-  const handleVideoSwitch = (index) => {
-    if (index !== currentVideo) {
-      setCurrentVideo(index)
-      setProgress(0)
-    }
-  }
-
-  // Handle video load
-  const handleVideoLoad = () => {
-    const video = videoRef.current
-    if (video) {
-      video.play().catch(console.error)
-    }
-  }
+  }, [currentVideo]) // Only depend on currentVideo
 
   return (
     <main className="relative overflow-hidden">
@@ -83,26 +130,17 @@ export default function Home() {
       
       {/* Video Background Container */}
       <div className="relative min-h-screen w-full">
-        {/* Video Element */}
-        <AnimatePresence mode="wait">
-          <motion.video
-            key={currentVideo}
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover z-0"
-            autoPlay
-            muted
-            playsInline
-            poster={videos[currentVideo].poster}
-            onLoadedData={handleVideoLoad}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <source src={videos[currentVideo].src} type="video/mp4" />
-            Your browser does not support the video tag.
-          </motion.video>
-        </AnimatePresence>
+        {/* Single Video Element - NO AnimatePresence */}
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+        >
+          Your browser does not support the video tag.
+        </video>
 
         {/* Video Overlay for Better Text Readability */}
         <div className="absolute inset-0 bg-black/30 z-10" />
@@ -166,79 +204,74 @@ export default function Home() {
             {/* Right Content - Video Controls */}
             <div className="hidden lg:flex space-x-4">
               {videos.map((video, index) => (
-                <motion.button
+                <button
                   key={video.id}
                   onClick={() => handleVideoSwitch(index)}
-                  className="relative w-16 h-2 bg-white/20 backdrop-blur-sm rounded-full overflow-hidden hover:bg-white/30 transition-colors duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="relative w-16 h-2 bg-white/20 backdrop-blur-sm rounded-full overflow-hidden hover:bg-white/30 transition-all duration-200 hover:scale-105"
                 >
                   {/* Progress Fill */}
-                  <motion.div
-                    className="absolute left-0 top-0 h-full bg-white rounded-full"
+                  <div
+                    className="absolute left-0 top-0 h-full bg-white rounded-full transition-all duration-100 ease-linear"
                     style={{
                       width: index === currentVideo ? `${progress}%` : '0%'
                     }}
-                    animate={{
-                      width: index === currentVideo ? `${progress}%` : '0%'
-                    }}
-                    transition={{ duration: 0.1 }}
                   />
 
                   {/* Active State Indicator */}
                   {index === currentVideo && (
-                    <motion.div
-                      className="absolute inset-0 bg-white/50 rounded-full"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
+                    <div className="absolute inset-0 bg-white/30 rounded-full" />
                   )}
 
-                  {/* Button Label (Hidden by default, shown on hover) */}
+                  {/* Button Label */}
                   <span className="sr-only">Play video {index + 1}</span>
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Mobile Video Controls - Horizontal layout at bottom center */}
+          {/* Mobile Video Controls */}
           <div className="lg:hidden flex justify-center mt-6">
             <div className="flex space-x-3">
               {videos.map((video, index) => (
-                <motion.button
+                <button
                   key={video.id}
                   onClick={() => handleVideoSwitch(index)}
-                  className="relative w-12 h-2 bg-white/20 backdrop-blur-sm rounded-full overflow-hidden"
-                  whileTap={{ scale: 0.95 }}
+                  className="relative w-12 h-2 bg-white/20 backdrop-blur-sm rounded-full overflow-hidden transition-transform duration-200 active:scale-95"
                 >
                   {/* Progress Fill */}
-                  <motion.div
-                    className="absolute left-0 top-0 h-full bg-white rounded-full"
-                    animate={{
+                  <div
+                    className="absolute left-0 top-0 h-full bg-white rounded-full transition-all duration-100 ease-linear"
+                    style={{
                       width: index === currentVideo ? `${progress}%` : '0%'
                     }}
-                    transition={{ duration: 0.1 }}
                   />
 
                   {/* Active State */}
                   {index === currentVideo && (
-                    <motion.div
-                      className="absolute inset-0 bg-white/50 rounded-full"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
+                    <div className="absolute inset-0 bg-white/30 rounded-full" />
                   )}
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
+
+          {/* Debug Info - Development only */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="fixed top-20 right-4 bg-black/90 text-white p-4 rounded-lg text-sm font-mono backdrop-blur">
+              <div className="space-y-1">
+                <div>Current Video: {currentVideo + 1}/{videos.length}</div>
+                <div>Progress: {Math.round(progress)}%</div>
+                <div>Source: {videos[currentVideo].src.split('/').pop()}</div>
+                <div className="mt-2 text-xs text-gray-300">
+                  Auto-loop: {currentVideo + 1} → {((currentVideo + 1) % videos.length) + 1}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Additional Sections (if needed) */}
+      {/* Additional Sections */}
       <section className="relative z-30 bg-white">
         {/* Your other page content goes here */}
       </section>
