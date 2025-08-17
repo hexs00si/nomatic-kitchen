@@ -192,16 +192,14 @@ export default function Home() {
             {/* Left Content - Main Heading */}
             <div className="max-w-3xl text-white">
               <motion.h1 
-                className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight"
+                className="text-2xl md:text-2xl lg:text-4xl xl:text-6xl font-bold leading-tight"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Lorem ipsum dolor
+                Automated For The
                 <br />
-                sit amet consectetur
-                <br />
-                adipiscing elit.
+                Modern Nomad                 
               </motion.h1>
             </div>
 
@@ -213,7 +211,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 1.0 }}
             >
               <p className="text-sm lg:text-base leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Automated For The Modern Nomad 
               </p>
             </motion.div>
           </div>
@@ -235,8 +233,8 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <p className="text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit.
+              <p className="text-base md:text-base lg:text-lg text-white/80 leading-relaxed">
+                Identity , Evolution and Permanence
               </p>
             </motion.div>
 
