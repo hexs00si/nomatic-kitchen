@@ -10,6 +10,8 @@ export default function Home() {
   const videoRef = useRef(null)
   const contentRef = useRef(null) // Ref for content container
   const idle = useRef(null) // Idle timeout reference
+  const touchStartRef = useRef(null) // Touch start position
+  const swipeContainerRef = useRef(null) // Swipe container reference
 
   // Video data with placeholder URLs
   const videos = [
@@ -43,6 +45,14 @@ export default function Home() {
     setProgress(0)
   }
 
+  // Go to previous video
+  const goToPreviousVideo = () => {
+    const prevIndex = currentVideo === 0 ? videos.length - 1 : currentVideo - 1
+    console.log(`Switching from video ${currentVideo + 1} to video ${prevIndex + 1}`)
+    setCurrentVideo(prevIndex)
+    setProgress(0)
+  }
+
   // Handle manual video switch
   const handleVideoSwitch = (index) => {
     if (index !== currentVideo) {
@@ -51,6 +61,88 @@ export default function Home() {
       setProgress(0)
     }
   }
+
+  // Touch/Swipe functionality for mobile and tablet
+  useEffect(() => {
+    const swipeContainer = swipeContainerRef.current
+    if (!swipeContainer) return
+
+    // Only enable on mobile/tablet screens
+    const isMobileOrTablet = () => window.innerWidth < 1024
+
+    const handleTouchStart = (e) => {
+      if (!isMobileOrTablet()) return
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches.clientY,
+        time: Date.now()
+      }
+    }
+
+    const handleTouchEnd = (e) => {
+      if (!isMobileOrTablet() || !touchStartRef.current) return
+
+      const touchEnd = {
+        x: e.changedTouches[0].clientX,
+        y: e.changedTouches.clientY,
+        time: Date.now()
+      }
+
+      const deltaX = touchEnd.x - touchStartRef.current.x
+      const deltaY = touchEnd.y - touchStartRef.current.y
+      const deltaTime = touchEnd.time - touchStartRef.current.time
+
+      // Check if it's a valid swipe (minimum distance and not too slow)
+      const minSwipeDistance = 50
+      const maxSwipeTime = 500
+
+      // Ensure horizontal swipe (not vertical scroll)
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        touchStartRef.current = null
+        return
+      }
+
+      // Check for horizontal swipe
+      if (Math.abs(deltaX) > minSwipeDistance && deltaTime < maxSwipeTime) {
+        if (deltaX > 0) {
+          // Swipe right - go to previous video
+          console.log('Swipe right - previous video')
+          goToPreviousVideo()
+        } else {
+          // Swipe left - go to next video  
+          console.log('Swipe left - next video')
+          goToNextVideo()
+        }
+      } else {
+        // Check for tap (no swipe, just tap)
+        if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10 && deltaTime < 200) {
+          const screenWidth = window.innerWidth
+          const tapX = touchEnd.x
+          
+          if (tapX > screenWidth / 2) {
+            // Tap on right side - next video
+            console.log('Tap right - next video')
+            goToNextVideo()
+          } else {
+            // Tap on left side - previous video
+            console.log('Tap left - previous video')
+            goToPreviousVideo()
+          }
+        }
+      }
+
+      touchStartRef.current = null
+    }
+
+    // Add touch event listeners
+    swipeContainer.addEventListener('touchstart', handleTouchStart, { passive: true })
+    swipeContainer.addEventListener('touchend', handleTouchEnd, { passive: true })
+
+    return () => {
+      swipeContainer.removeEventListener('touchstart', handleTouchStart)
+      swipeContainer.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [currentVideo, videos.length])
 
   // Idle fade functionality - similar to navbar
   useEffect(() => {
@@ -164,8 +256,11 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navbar />
       
-      {/* Video Background Container */}
-      <div className="relative min-h-screen w-full">
+      {/* Video Background Container with Swipe Detection */}
+      <div 
+        ref={swipeContainerRef}
+        className="relative min-h-screen w-full"
+      >
         {/* Single Video Element - NO AnimatePresence */}
         <video
           ref={videoRef}
@@ -180,6 +275,18 @@ export default function Home() {
 
         {/* Video Overlay for Better Text Readability */}
         <div className="absolute inset-0 bg-black/30 z-10" />
+
+        {/* Invisible Touch Areas for Visual Feedback (Mobile/Tablet only) */}
+        <div className="lg:hidden absolute inset-0 z-15 pointer-events-none">
+          {/* Left touch area indicator */}
+          <div className="absolute left-0 top-0 w-1/2 h-full flex items-center justify-start pl-8">
+            <div className="w-2 h-16 bg-white/20 rounded-full opacity-0 transition-opacity duration-200" id="left-indicator" />
+          </div>
+          {/* Right touch area indicator */}
+          <div className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-end pr-8">
+            <div className="w-2 h-16 bg-white/20 rounded-full opacity-0 transition-opacity duration-200" id="right-indicator" />
+          </div>
+        </div>
 
         {/* Main Content Container - with fade functionality */}
         <div 
@@ -291,6 +398,11 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* Mobile Swipe Instruction (only show briefly on first load)
+          <div className="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 text-white/50 text-xs text-center px-4 py-2 bg-black/30 rounded-lg backdrop-blur-sm">
+            Swipe or tap left/right to change videos
+          </div> */}
 
           {/* Debug Info - Development only */}
           {/* {process.env.NODE_ENV === 'development' && (
