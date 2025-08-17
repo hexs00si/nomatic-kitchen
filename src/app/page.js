@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/layout/Navbar'
 import MeetNomatic from '@/components/sections/MeetNomatic'
+import OurServices from '@/components/sections/OurServices'
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
@@ -404,6 +405,8 @@ export default function Home() {
 
       {/* Meet Nomatic Section */}
       <MeetNomatic />
+      {/* Our Services Section */}
+      <OurServices />
 
       {/* Additional Sections */}
       <section className="relative z-30 bg-white min-h-screen">
