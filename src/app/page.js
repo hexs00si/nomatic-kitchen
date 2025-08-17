@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/layout/Navbar'
+import MeetNomatic from '@/components/sections/MeetNomatic'
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
@@ -256,7 +257,7 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navbar />
       
-      {/* Video Background Container with Swipe Detection */}
+      {/* Hero Section - Video Background Container with Swipe Detection */}
       <div 
         ref={swipeContainerRef}
         className="relative min-h-screen w-full"
@@ -398,31 +399,15 @@ export default function Home() {
               ))}
             </div>
           </div>
-
-          {/* Mobile Swipe Instruction (only show briefly on first load)
-          <div className="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 text-white/50 text-xs text-center px-4 py-2 bg-black/30 rounded-lg backdrop-blur-sm">
-            Swipe or tap left/right to change videos
-          </div> */}
-
-          {/* Debug Info - Development only */}
-          {/* {process.env.NODE_ENV === 'development' && (
-            <div className="fixed top-20 right-4 bg-black/90 text-white p-4 rounded-lg text-sm font-mono backdrop-blur">
-              <div className="space-y-1">
-                <div>Current Video: {currentVideo + 1}/{videos.length}</div>
-                <div>Progress: {Math.round(progress)}%</div>
-                <div>Source: {videos[currentVideo].src.split('/').pop()}</div>
-                <div className="mt-2 text-xs text-gray-300">
-                  Auto-loop: {currentVideo + 1} → {((currentVideo + 1) % videos.length) + 1}
-                </div>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
 
+      {/* Meet Nomatic Section */}
+      <MeetNomatic />
+
       {/* Additional Sections */}
-      <section className="relative z-30 bg-white">
-        {/* Your other page content goes here */}
+      <section className="relative z-30 bg-white min-h-screen">
+        {/* Future page content goes here */}
       </section>
     </main>
   )
