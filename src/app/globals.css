@@ -14,7 +14,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
   overflow-x: hidden;
 }
 
@@ -34,4 +34,12 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+/* SF Pro style font utility for headings */
+.font-sf-pro-expanded {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-stretch: expanded;
 }

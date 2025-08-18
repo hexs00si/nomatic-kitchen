@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -283,36 +282,42 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="hidden lg:block fixed z-30 rounded-xl p-6 shadow-2xl bg-[#1E1F1F]"
+            className="hidden lg:block fixed z-30 rounded-xl p-2 shadow-2xl bg-[#1E1F1F]"
             style={{ 
               left: dropdownPosition.left,
               top: dropdownPosition.top,
               width: '1000px'
             }}
-            onMouseEnter={() => setActiveDropdown(activeDropdown)}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={() => {
+              setActiveDropdown(activeDropdown)
+              // Prevent page scrolling when mouse is over mega menu
+              document.body.style.overflow = 'hidden'
+            }}
+            onMouseLeave={() => {
+              handleMouseLeave()
+              // Re-enable page scrolling when mouse leaves mega menu
+              document.body.style.overflow = 'auto'
+            }}
           >
             <div className="relative">
-              {/* Left Arrow */}
-              {menuData[activeDropdown].length > 3 && (
-                <button
-                  onClick={() => scroll('left', activeDropdown)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                  aria-label="Scroll left"
-                >
-                  <ChevronLeftIcon className="w-5 h-5 text-white" />
-                </button>
-              )}
-
               {/* Scrollable Container */}
               <div
                 ref={(el) => scrollRefs.current[activeDropdown] = el}
-                className="flex gap-6 overflow-x-auto scrollbar-hide"
+                className="flex gap-2 overflow-x-auto scrollbar-hide"
                 style={{ 
                   scrollbarWidth: 'none', 
                   msOverflowStyle: 'none',
-                  paddingLeft: menuData[activeDropdown].length > 3 ? '60px' : '20px',
-                  paddingRight: menuData[activeDropdown].length > 3 ? '60px' : '20px',
+                  paddingLeft: '2px',
+                  paddingRight: '2px',
+                  paddingBottom: '2px',
+                }}
+                onWheel={(e) => {
+                  // Prevent page scroll when scrolling inside mega menu
+                  e.preventDefault()
+                  e.stopPropagation()
+                  const container = e.currentTarget
+                  const scrollAmount = e.deltaY * 2 // Multiply for smoother scrolling
+                  container.scrollLeft += scrollAmount
                 }}
               >
                 {menuData[activeDropdown].map((subItem) => (
@@ -321,7 +326,7 @@ export default function Navbar() {
                     href={subItem.href}
                     className="flex-shrink-0 w-80 group cursor-pointer"
                   >
-                    <div className="relative h-72 rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                    <div className="relative h-72 rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-[1.006] hover:shadow-xl">
                       {/* Background Image */}
                       <div 
                         className="absolute inset-0 bg-cover bg-center bg-gray-600 transition-transform duration-300 group-hover:scale-110"
@@ -364,17 +369,6 @@ export default function Navbar() {
                   </a>
                 ))}
               </div>
-
-              {/* Right Arrow */}
-              {menuData[activeDropdown].length > 3 && (
-                <button
-                  onClick={() => scroll('right', activeDropdown)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                  aria-label="Scroll right"
-                >
-                  <ChevronRightIcon className="w-5 h-5 text-white" />
-                </button>
-              )}
             </div>
           </motion.div>
         )}

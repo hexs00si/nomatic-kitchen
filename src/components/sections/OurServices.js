@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 const services = [
   {
@@ -223,7 +223,7 @@ export default function OurServices() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none">
+                <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none font-sf-pro-expanded">
                   <span className="text-[#EB1B26]">/</span>
                   <span className="text-[#111111] ml-2">OUR SERVICES</span>
                 </h2>
@@ -421,7 +421,7 @@ export default function OurServices() {
           {/* Header positioned at bottom left */}
           <div className="absolute bottom-4 left-4 z-20">
             <motion.h2 
-              className="text-3xl sm:text-4xl font-bold"
+              className="text-3xl sm:text-4xl font-bold font-sf-pro-expanded"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}

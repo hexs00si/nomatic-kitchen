@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import Navbar from '@/components/layout/Navbar'
-import MeetNomatic from '@/components/sections/MeetNomatic'
-import OurServices from '@/components/sections/OurServices'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Navbar from '../components/layout/Navbar'
+import MeetNomatic from '../components/sections/MeetNomatic'
+import OurServices from '../components/sections/OurServices'
 
 export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(0)
@@ -15,8 +15,8 @@ export default function Home() {
   const touchStartRef = useRef(null) // Touch start position
   const swipeContainerRef = useRef(null) // Swipe container reference
 
-  // Video data with placeholder URLs
-  const videos = [
+  // Video data with placeholder URLs - memoized to prevent re-renders
+  const videos = useMemo(() => [
     {
       id: 1,
       src: '/videos/kitchen-1.mp4',
@@ -37,23 +37,23 @@ export default function Home() {
       src: '/videos/kitchen-4.mp4',
       poster: '/images/kitchen-poster-4.jpg'
     }
-  ]
+  ], [])
 
-  // Auto-advance to next video
-  const goToNextVideo = () => {
+  // Auto-advance to next video - memoized to prevent re-renders
+  const goToNextVideo = useCallback(() => {
     const nextIndex = (currentVideo + 1) % videos.length
     console.log(`Switching from video ${currentVideo + 1} to video ${nextIndex + 1}`)
     setCurrentVideo(nextIndex)
     setProgress(0)
-  }
+  }, [currentVideo, videos.length])
 
-  // Go to previous video
-  const goToPreviousVideo = () => {
+  // Go to previous video - memoized to prevent re-renders
+  const goToPreviousVideo = useCallback(() => {
     const prevIndex = currentVideo === 0 ? videos.length - 1 : currentVideo - 1
     console.log(`Switching from video ${currentVideo + 1} to video ${prevIndex + 1}`)
     setCurrentVideo(prevIndex)
     setProgress(0)
-  }
+  }, [currentVideo, videos.length])
 
   // Handle manual video switch
   const handleVideoSwitch = (index) => {
@@ -144,7 +144,7 @@ export default function Home() {
       swipeContainer.removeEventListener('touchstart', handleTouchStart)
       swipeContainer.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [currentVideo, videos.length])
+  }, [currentVideo, videos.length, goToNextVideo, goToPreviousVideo])
 
   // Idle fade functionality - similar to navbar
   useEffect(() => {
@@ -252,7 +252,7 @@ export default function Home() {
       video.removeEventListener('play', handlePlay)
       video.removeEventListener('error', handleError)
     }
-  }, [currentVideo])
+  }, [currentVideo, videos, goToNextVideo])
 
   return (
     <main className="relative overflow-hidden">

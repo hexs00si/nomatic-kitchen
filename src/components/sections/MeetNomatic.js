@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export default function MeetNomatic() {
   // Core state
@@ -124,8 +124,8 @@ export default function MeetNomatic() {
         const diff = localCharIndex - prev
         if (Math.abs(diff) < 0.1) return localCharIndex
         
-        // Fast, smooth animation
-        const next = prev + (diff * 0.15)
+        // Much faster, more responsive animation
+        const next = prev + (diff * 0.8) // Increased from 0.15 to 0.8 for faster response
         if (Math.abs(localCharIndex - next) > 0.1) {
           animationFrame.current = requestAnimationFrame(animate)
         }
@@ -147,7 +147,7 @@ export default function MeetNomatic() {
     const handleWheel = (e) => {
       if (isUpdating) return // Prevent overwhelming updates
       
-      const delta = Math.sign(e.deltaY) * Math.min(Math.abs(e.deltaY) / 4, 2)
+      const delta = Math.sign(e.deltaY) * Math.min(Math.abs(e.deltaY) / 0.02, 400) // Increased speed by 200x
       const newProgress = scrollAccumulator.current + delta
       
       if (newProgress <= 0 && delta < 0) {
@@ -287,7 +287,7 @@ export default function MeetNomatic() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none font-sf-pro-expanded">
                 <span className="text-[#EB1B26]">/</span>
                 <span className="text-white ml-2">MEET NOM</span>
                 <span className="text-[#EB1B26]">A</span>
