@@ -264,7 +264,7 @@ export default function Navbar() {
           </ul>
 
           <a
-            href="#contact"
+            href="/contact"
             className="ml-8 rounded-lg h-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
           >
             Contact
