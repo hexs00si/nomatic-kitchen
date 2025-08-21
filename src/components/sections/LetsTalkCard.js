@@ -1,6 +1,3 @@
-// Implement the Emailservice using sendgrid 
-// Change the background to maintain UI consistency as well 
-
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
@@ -256,10 +253,15 @@ export default function LetsTalkCard() {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="h-full flex flex-col"
                 >
-                  {/* Form header */}
+                  {/* Form header with responsive flex for mobile - REMOVED redundant icon */}
                   <div className="mb-8">
-                    <h3 className="text-2xl font-semibold text-white mb-2">Prefer Planning Ahead ?</h3>
-                    <p className="text-gray-400">We welcome your questions and feedback</p>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                        Prefer Planning Ahead ?
+                      </h3>
+                      {/* REMOVED: The redundant rotating MessageCircle icon */}
+                    </div>
+                    <p className="text-gray-400 text-sm sm:text-base mt-2">We welcome your questions and feedback</p>
                   </div>
 
                   {/* Enhanced form with spacing animations */}

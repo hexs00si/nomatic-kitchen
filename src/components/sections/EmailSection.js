@@ -145,35 +145,24 @@ export default function EmailSection() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#EB1B26] rounded-full blur-3xl animate-pulse" />
       </div>
 
-      <div className="text-center space-y-16 max-w-6xl mx-auto relative z-10">
-        {/* Animated heading */}
+      <div className="text-center space-y-8 md:space-y-16 max-w-6xl mx-auto relative z-10 w-full">
+        {/* Animated heading - Fixed to stay on one line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="space-y-8"
+          className="space-y-4 md:space-y-8 w-full overflow-hidden"
         >
           <h1 
             ref={headingRef}
-            className="text-5xl md:text-7xl lg:text-8xl font-sf-pro-expanded text-white flex items-center justify-center gap-6"
+            className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-sf-pro-expanded text-white whitespace-nowrap px-2"
           >
-            <span className="text-[#EB1B26]">/</span>
-            Email us
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ 
-                duration: 20, 
-                repeat: Infinity, 
-                ease: "linear" 
-              }}
-            >
-              <Mail className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[#EB1B26]" />
-            </motion.div>
+            <span className="text-[#EB1B26]">/</span>Get in Touch
           </h1>
         </motion.div>
 
         {/* Enhanced email display with cursor */}
-        <div className="space-y-12">
+        <div className="space-y-8 md:space-y-12">
           <motion.div
             className="relative flex items-center justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -182,13 +171,13 @@ export default function EmailSection() {
           >
             <div 
               ref={emailTextRef}
-              className="text-3xl md:text-5xl lg:text-7xl font-mono font-bold text-white tracking-wider select-none"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-mono font-bold text-white tracking-wider select-none overflow-hidden"
               style={{ minHeight: '1.2em' }}
             >
               {emailText}
             </div>
             <span 
-              className={`inline-block w-1 md:w-1.5 lg:w-2 h-8 md:h-12 lg:h-16 bg-[#EB1B26] ml-2 transition-opacity duration-300 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
+              className={`inline-block w-1 sm:w-1.5 md:w-2 h-6 sm:h-8 md:h-10 lg:h-12 xl:h-14 bg-[#EB1B26] ml-1 sm:ml-2 transition-opacity duration-300 ${showCursor ? 'opacity-100' : 'opacity-0'}`}
             />
           </motion.div>
 
@@ -201,15 +190,16 @@ export default function EmailSection() {
           />
         </div>
 
-        {/* RESTORED: Previous Email Now button style */}
+        {/* Email Now button */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 3 }}
+          className="pt-4 md:pt-0"
         >
           <motion.button
             onClick={handleEmailClick}
-            className="group relative inline-flex items-center gap-4 bg-transparent border-2 border-white text-white px-12 py-4 md:px-16 md:py-6 rounded-full font-bold text-lg md:text-xl uppercase tracking-wide transition-all duration-300 hover:bg-white hover:text-[#383838] shadow-lg hover:shadow-[0_10px_40px_rgba(255,255,255,0.2)]"
+            className="group relative inline-flex items-center gap-2 sm:gap-3 bg-transparent border-2 border-white text-white px-6 py-3 sm:px-10 sm:py-4 md:px-14 md:py-5 lg:px-16 lg:py-6 rounded-full font-bold text-base sm:text-lg md:text-xl uppercase tracking-wide transition-all duration-300 hover:bg-white hover:text-[#383838] shadow-lg hover:shadow-[0_10px_40px_rgba(255,255,255,0.2)]"
             whileHover={{ 
               scale: 1.05,
               boxShadow: "0 10px 40px rgba(255, 255, 255, 0.3)"
@@ -230,7 +220,7 @@ export default function EmailSection() {
                 ease: "easeInOut" 
               }}
             >
-              <ArrowRight className="h-6 w-6 md:h-8 md:w-8" />
+              <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8" />
             </motion.div>
 
             {/* Button background glow */}
