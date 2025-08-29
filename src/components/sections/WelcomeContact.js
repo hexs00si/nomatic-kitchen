@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -12,8 +13,22 @@ export default function WelcomeContact() {
   const containerRef = useRef(null)
   const textRefs = useRef([])
   const lenisRef = useRef(null)
+  const cursorImageRef = useRef(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isHovered, setIsHovered] = useState(false)
 
-  // Text sections with proper key props
+  // Array of images for cursor follow effect
+  const cursorImages = [
+    '/images/interior1.jpg',
+    '/images/interior2.jpg', 
+    '/images/kitchen1.jpg',
+    '/images/wardrobe1.jpg',
+    '/images/design1.jpg',
+    '/images/craftsmanship1.jpg'
+  ]
+
+  // Text sections
   const textSections = [
     <span key="welcome">WELCOME TO</span>,
     <span key="studio">
@@ -27,8 +42,9 @@ export default function WelcomeContact() {
     </span>
   ]
 
+  // Lenis and GSAP animations
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
+    // Initialize Lenis
     lenisRef.current = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -42,9 +58,9 @@ export default function WelcomeContact() {
     }
     requestAnimationFrame(raf)
 
-    // GSAP scroll-triggered animations for text
+    // GSAP text animations
     const ctx = gsap.context(() => {
-      textRefs.current.forEach((textRef, index) => {
+      textRefs.current.forEach((textRef) => {
         if (!textRef) return
 
         gsap.set(textRef, {
@@ -96,7 +112,7 @@ export default function WelcomeContact() {
         })
       })
 
-      // Background fade-out animation
+      // Background fade-out
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "bottom bottom",
@@ -118,6 +134,50 @@ export default function WelcomeContact() {
     }
   }, [])
 
+  // Mouse tracking - completely separate from GSAP
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+      
+      // Change image randomly
+      if (Math.random() > 0.95) {
+        const newIndex = Math.floor(Math.random() * cursorImages.length)
+        setCurrentImageIndex(newIndex)
+      }
+    }
+
+    const handleMouseEnter = () => {
+      setIsHovered(true)
+      if (containerRef.current) {
+        containerRef.current.style.cursor = 'none'
+      }
+    }
+
+    const handleMouseLeave = () => {
+      setIsHovered(false)
+      if (containerRef.current) {
+        containerRef.current.style.cursor = 'auto'
+      }
+    }
+
+    // Add event listeners to the container
+    const container = containerRef.current
+    if (container) {
+      container.addEventListener('mouseenter', handleMouseEnter)
+      container.addEventListener('mouseleave', handleMouseLeave)
+      // Use document for mousemove to track across entire container
+      document.addEventListener('mousemove', handleGlobalMouseMove)
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('mouseenter', handleMouseEnter)
+        container.removeEventListener('mouseleave', handleMouseLeave)
+      }
+      document.removeEventListener('mousemove', handleGlobalMouseMove)
+    }
+  }, [cursorImages.length])
+
   return (
     <div
       ref={containerRef}
@@ -126,7 +186,28 @@ export default function WelcomeContact() {
         background: 'linear-gradient(135deg, #383838 0%, #1F1E1E 100%)',
       }}
     >
-      {/* Animated background lines - Fixed positioning to cover all sections */}
+      {/* Cursor following image - Using position state instead of GSAP */}
+      <div
+        className="fixed pointer-events-none z-50 w-32 h-32 sm:w-40 sm:h-40 rounded-lg border-2 border-[#EB1B26] shadow-2xl overflow-hidden transition-opacity duration-300"
+        style={{
+          left: mousePosition.x - 64, // Half of w-32 (128px/2)
+          top: mousePosition.y - 64,  // Half of h-32 (128px/2)
+          opacity: isHovered ? 1 : 0,
+          transform: 'translate3d(0, 0, 0)',
+          mixBlendMode: 'screen'
+        }}
+      >
+        <Image
+          src={cursorImages[currentImageIndex]}
+          alt="Interior design showcase"
+          fill
+          sizes="(max-width: 640px) 128px, 160px"
+          className="object-cover"
+          priority
+        />
+      </div>
+
+      {/* Animated background lines */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {/* Vertical lines */}
         {[...Array(8)].map((_, i) => (
@@ -185,7 +266,7 @@ export default function WelcomeContact() {
         </section>
       ))}
       
-      <div className="h-5 sm:h-5" />
+      <div className="h-20 sm:h-40" />
 
       {/* CSS animations */}
       <style jsx>{`
