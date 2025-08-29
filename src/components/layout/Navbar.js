@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link' // Import Link from Next.js
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 export default function Navbar() {
@@ -52,20 +53,18 @@ export default function Navbar() {
   const calculateDropdownPosition = () => {
     if (containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect()
-      const dropdownWidth = 1000 // Fixed dropdown width
+      const dropdownWidth = 1000
       
-      // Center dropdown relative to the entire navbar container
       const containerCenter = containerRect.left + (containerRect.width / 2)
       let left = containerCenter - (dropdownWidth / 2)
       
-      // Ensure dropdown doesn't go off-screen
       const minLeft = 20
       const maxLeft = window.innerWidth - dropdownWidth - 20
       left = Math.max(minLeft, Math.min(left, maxLeft))
       
       setDropdownPosition({
         left: left,
-        top: containerRect.bottom + 8 // 8px gap below navbar
+        top: containerRect.bottom + 8
       })
     }
   }
@@ -191,7 +190,7 @@ export default function Navbar() {
         />
       </header>
 
-      {/* BACKDROP MENU with animation */}
+      {/* BACKDROP MENU with animation - FIXED: Use Link instead of anchor */}
       <AnimatePresence>
         {open && (
           <motion.nav
@@ -203,28 +202,28 @@ export default function Navbar() {
             className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-7 bg-black/90 backdrop-blur-lg"
           >
             {links.map((item) => (
-              <a
+              <Link 
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                 onClick={toggle}
                 className="text-2xl font-light tracking-wide text-white hover:text-gray-200 transition-colors duration-200"
               >
                 {item}
-              </a>
+              </Link>
             ))}
 
-            <a
-              href="#contact"
+            <Link
+              href="/contact"
               onClick={toggle}
               className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
             >
               Contact
-            </a>
+            </Link>
           </motion.nav>
         )}
       </AnimatePresence>
 
-      {/* DESKTOP NAVIGATION */}
+      {/* DESKTOP NAVIGATION - FIXED: Use Link instead of anchor */}
       <div 
         ref={containerRef}
         className="hidden lg:flex-row lg:flex w-[57rem] lg:flex-wrap fixed top-6 left-1/2 z-40 transition-all duration-500 ease-out"
@@ -251,28 +250,28 @@ export default function Navbar() {
                 onMouseEnter={() => handleMouseEnter(item)}
                 className="relative"
               >
-                <a
+                <Link
                   ref={(el) => linkRefs.current[item] = el}
-                  href={`#${item.toLowerCase()}`}
+                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   className="relative text-sm font-light tracking-wide text-white/85 hover:text-white transition-colors duration-200 group whitespace-nowrap"
                 >
                   {item}
                   <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full" />
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
 
-          <a
+          <Link
             href="/contact"
             className="ml-8 rounded-lg h-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
           >
             Contact
-          </a>
+          </Link>
         </nav>
       </div>
 
-      {/* DROPDOWN MEGA MENU - Fixed positioned centered to navbar */}
+      {/* DROPDOWN MEGA MENU - FIXED: Use Link instead of anchor */}
       <AnimatePresence>
         {activeDropdown && menuData[activeDropdown] && (
           <motion.div
@@ -290,17 +289,14 @@ export default function Navbar() {
             }}
             onMouseEnter={() => {
               setActiveDropdown(activeDropdown)
-              // Prevent page scrolling when mouse is over mega menu
               document.body.style.overflow = 'hidden'
             }}
             onMouseLeave={() => {
               handleMouseLeave()
-              // Re-enable page scrolling when mouse leaves mega menu
               document.body.style.overflow = 'auto'
             }}
           >
             <div className="relative">
-              {/* Scrollable Container */}
               <div
                 ref={(el) => scrollRefs.current[activeDropdown] = el}
                 className="flex gap-2 overflow-x-auto scrollbar-hide"
@@ -312,34 +308,29 @@ export default function Navbar() {
                   paddingBottom: '2px',
                 }}
                 onWheel={(e) => {
-                  // Prevent page scroll when scrolling inside mega menu
                   e.preventDefault()
                   e.stopPropagation()
                   const container = e.currentTarget
-                  const scrollAmount = e.deltaY * 2 // Multiply for smoother scrolling
+                  const scrollAmount = e.deltaY * 2
                   container.scrollLeft += scrollAmount
                 }}
               >
                 {menuData[activeDropdown].map((subItem) => (
-                  <a
+                  <Link
                     key={subItem.id}
                     href={subItem.href}
                     className="flex-shrink-0 w-80 group cursor-pointer"
                   >
                     <div className="relative h-72 rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-[1.006] hover:shadow-xl">
-                      {/* Background Image */}
                       <div 
                         className="absolute inset-0 bg-cover bg-center bg-gray-600 transition-transform duration-300 group-hover:scale-110"
                         style={{ backgroundImage: `url(${subItem.image})` }}
                       />
                       
-                      {/* Overlay Gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                       
-                      {/* Content Container */}
                       <div className="absolute inset-0 p-6 flex flex-col justify-end">
                         <div className="flex items-end justify-between">
-                          {/* Left Side - Title and Description */}
                           <div className="flex-1 mr-4">
                             <h3 className="text-white font-semibold text-sm mb-1 leading-tight">
                               {subItem.title}
@@ -349,7 +340,6 @@ export default function Navbar() {
                             </p>
                           </div>
                           
-                          {/* Right Side - Action Button */}
                           <div className="flex-shrink-0">
                             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-200 p-4">
                               <svg 
@@ -366,7 +356,7 @@ export default function Navbar() {
                         </div>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

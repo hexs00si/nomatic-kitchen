@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Navbar from '../components/layout/Navbar'
+
 import MeetNomatic from '../components/sections/MeetNomatic'
 import OurServices from '../components/sections/OurServices'
 
@@ -256,8 +256,7 @@ export default function Home() {
 
   return (
     <main className="relative overflow-hidden">
-      <Navbar />
-      
+          
       {/* Hero Section - Video Background Container with Swipe Detection */}
       <div 
         ref={swipeContainerRef}
