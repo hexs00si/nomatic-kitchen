@@ -20,12 +20,10 @@ export default function WelcomeContact() {
 
   // Array of images for cursor follow effect
   const cursorImages = [
-    '/images/interior1.jpg',
-    '/images/interior2.jpg', 
-    '/images/kitchen1.jpg',
-    '/images/wardrobe1.jpg',
-    '/images/design1.jpg',
-    '/images/craftsmanship1.jpg'
+    '/images/Cursor1.jpg',
+    '/images/Cursor2.jpg',
+    '/images/Cursor3.jpg',
+    '/images/Cursor4.jpg',
   ]
 
   // Text sections
@@ -266,7 +264,7 @@ export default function WelcomeContact() {
         </section>
       ))}
       
-      <div className="h-20 sm:h-40" />
+      <div className="h-5 sm:h-5" />
 
       {/* CSS animations */}
       <style jsx>{`
