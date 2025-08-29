@@ -9,9 +9,8 @@ export default function FindShowroomSection() {
 
   // Showroom location details
   const showroomLocation = {
-    address: "Plot No. 1210, JLPL, Industrial Park Sector 82, Mohali, Punjab - 140308",
-    features: "Free parking, metro 500m away, wheelchair accessible.",
-    googleMapsUrl: "https://www.google.com/maps/place/Plot+No.+1210,+JLPL+Industrial+Park,+Sector+82,+Mohali,+Punjab+140308"
+    address: "Plot No. 11, Sector 82, JLPL Industrial Area, Mohali, Punjab 140306",
+    googleMapsUrl: "https://www.google.com/maps?um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KZ9f9p396w85MW6sfiIcCIlf&daddr=Plot+No.+11,+Sector+82,+JLPL+Industrial+Area,+Mohali,+Punjab+140306"
   }
 
   // Smooth continuous rotation for the slash

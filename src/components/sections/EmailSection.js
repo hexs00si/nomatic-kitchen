@@ -39,7 +39,7 @@ export default function EmailSection() {
     }
 
     // Enhanced typewriter effect for email with looping
-    const fullEmail = 'info@nomatic.co.in'
+    const fullEmail = 'info@nomaticluxe.com'
     let currentIndex = 0
     let isDeleting = false
     let typewriterInterval
@@ -83,7 +83,7 @@ export default function EmailSection() {
   }, [isClient])
 
   const handleEmailClick = () => {
-    const email = 'info@nomatic.co.in'
+    const email = 'info@nomaticluxe.com'
     const subject = 'Inquiry from Nomatic Website'
     const body = `Hello Nomatic Team,%0D%0A%0D%0AI am interested in your services and would like to discuss my requirements further.%0D%0A%0D%0AThank you for your time.%0D%0A%0D%0ABest regards`
 
