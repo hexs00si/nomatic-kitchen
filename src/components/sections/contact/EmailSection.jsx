@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, ArrowRight, Send, MessageSquare, AtSign, Inbox } from 'lucide-react'
+import { ArrowRight, AtSign, Inbox, Mail, MessageSquare, Send } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function EmailSection() {
   const emailTextRef = useRef(null)

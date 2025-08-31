@@ -1,9 +1,10 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link' // Import Link from Next.js
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Logo from '@/components/common/Logo';
+import { contactInfo, menuData, navLinks } from '@/data/navbar';
+import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link'; // Import Link from Next.js
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -16,40 +17,6 @@ export default function Navbar() {
   const scrollRefs = useRef({})
   const linkRefs = useRef({})
 
-  /* -------------------------------------------------- dropdown data */
-  const menuData = {
-    'Wardrobe': [
-      { id: 1, title: 'Classical Wardrobes', image: '/images/wardrobe-1.jpg', href: '/wardrobe/walk-in' },
-      { id: 2, title: 'Modern Wardrobes', image: '/images/wardrobe-2.jpg', href: '/wardrobe/sliding' },
-      { id: 3, title: 'Neo-Classical Wardrobes', image: '/images/wardrobe-3.jpg', href: '/wardrobe/hinged' },
-    ],
-    'Kitchen': [
-      { id: 1, title: 'Modular Kitchen', image: '/images/kitchen-1.jpg', href: '/kitchen/modular' },
-      { id: 2, title: 'L-Shaped Kitchen', image: '/images/kitchen-2.jpg', href: '/kitchen/l-shaped' },
-      { id: 3, title: 'U-Shaped Kitchen', image: '/images/kitchen-3.jpg', href: '/kitchen/u-shaped' },
-      { id: 4, title: 'Island Kitchen', image: '/images/kitchen-4.jpg', href: '/kitchen/island' },
-    ],
-    'Services': [
-      { id: 1, title: '3D Design', image: '/images/service-1.jpg', href: '/services/3d-design' },
-      { id: 2, title: 'Installation', image: '/images/service-2.jpg', href: '/services/installation' },
-      { id: 3, title: 'Maintenance', image: '/images/service-3.jpg', href: '/services/maintenance' },
-    ],
-    'Gallery': [
-      { id: 1, title: 'Recent Projects', image: '/images/gallery-1.jpg', href: '/gallery/recent' },
-      { id: 2, title: 'Kitchen Gallery', image: '/images/gallery-2.jpg', href: '/gallery/kitchen' },
-      { id: 3, title: 'Wardrobe Gallery', image: '/images/gallery-3.jpg', href: '/gallery/wardrobe' },
-      { id: 4, title: 'Living Room', image: '/images/gallery-4.jpg', href: '/gallery/living' },
-    ],
-    'About': [
-      { id: 1, title: 'Our Story', image: '/images/about-1.jpg', href: '/about/story' },
-      { id: 2, title: 'Our Team', image: '/images/about-2.jpg', href: '/about/team' },
-      { id: 3, title: 'Certifications', image: '/images/about-3.jpg', href: '/about/certifications' },
-    ]
-  }
-
-  const links = ['Home', 'Wardrobe', 'Kitchen', 'Services', 'Gallery', 'About']
-
-  /* -------------------------------------------------- calculate dropdown position centered to navbar */
   const calculateDropdownPosition = () => {
     if (containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect()
@@ -69,14 +36,12 @@ export default function Navbar() {
     }
   }
 
-  /* -------------------------------------------------- update position when dropdown opens or window resizes */
   useLayoutEffect(() => {
     if (activeDropdown) {
       calculateDropdownPosition()
     }
   }, [activeDropdown])
 
-  /* -------------------------------------------------- desktop idle-hide */
   useEffect(() => {
     const reveal = () => {
       if (window.innerWidth >= 1024 && containerRef.current) {
@@ -180,9 +145,7 @@ export default function Navbar() {
           <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? '-translate-y-[7px] -rotate-45' : ''}`} />
         </button>
 
-        <Image
-          src="/logo-nomatic.png"
-          alt="Nomatic Kitchens & Wardrobes"
+        <Logo
           width={130}
           height={32}
           className="h-8 w-auto"
@@ -201,7 +164,7 @@ export default function Navbar() {
             exit="exit"
             className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-7 bg-black/90 backdrop-blur-lg"
           >
-            {links.map((item) => (
+            {navLinks.map((item) => (
               <Link 
                 key={item}
                 href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
@@ -213,11 +176,11 @@ export default function Navbar() {
             ))}
 
             <Link
-              href="/contact"
+              href={contactInfo.href}
               onClick={toggle}
               className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
             >
-              Contact
+              {contactInfo.label}
             </Link>
           </motion.nav>
         )}
@@ -234,9 +197,7 @@ export default function Navbar() {
           ref={navRef}
           className="flex items-center rounded-xl px-8 py-4 bg-[#1E1F1F]"
         >
-          <Image
-            src="/logo-nomatic.png"
-            alt="Nomatic Kitchens & Wardrobes"
+          <Logo
             width={160}
             height={36}
             className="h-9 w-auto flex-shrink-0"
@@ -244,7 +205,7 @@ export default function Navbar() {
           />
 
           <ul className="ml-8 flex items-center space-x-10">
-            {links.map((item) => (
+            {navLinks.map((item) => (
               <li 
                 key={item}
                 onMouseEnter={() => handleMouseEnter(item)}
@@ -263,15 +224,13 @@ export default function Navbar() {
           </ul>
 
           <Link
-            href="/contact"
+            href={contactInfo.href}
             className="ml-8 rounded-lg h-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
           >
-            Contact
+            {contactInfo.label}
           </Link>
         </nav>
       </div>
-
-      {/* DROPDOWN MEGA MENU - FIXED: Use Link instead of anchor */}
       <AnimatePresence>
         {activeDropdown && menuData[activeDropdown] && (
           <motion.div
@@ -336,7 +295,7 @@ export default function Navbar() {
                               {subItem.title}
                             </h3>
                             <p className="text-white/70 text-xs leading-tight">
-                              Explore our premium {subItem.title.toLowerCase()} collection
+                              {subItem.description}
                             </p>
                           </div>
                           

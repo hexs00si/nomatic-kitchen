@@ -1,0 +1,51 @@
+
+export const testimonials = [
+  {
+    id: "1",
+    category: "Modular kitchen",
+    text: "Technical expertise is best, variety of display is huge, and services and assistant cannot get better. I will highly recommend every novice who want to install high quality modular kitchen in their home.",
+    rating: 5,
+    author: "Bhuvan Sharma",
+    location: "Chandigarh",
+  },
+  {
+    id: "2",
+    category: "Complete Interior",
+    text: "Excellent work quality. A vast variety available with competitive pricing. Very happy with the complete work. Sales manager Mr. Vineet Sharma is very co-operative throughout the work process.",
+    rating: 5,
+    author: "Shweta Mehra",
+    location: "Delhi",
+  },
+  {
+    id: "3",
+    category: "Modular kitchen",
+    text: "Best service in Chandigarh!! Excellent and great quality of work, highly satisfied with their product. Sales Representative Alankar is a very gentle and humble person, he is very helpful and guided us very well.",
+    rating: 5,
+    author: "Parwez Alam",
+    location: "Chandigarh",
+  },
+  {
+    id: "4",
+    category: "Modular kitchen",
+    text: "A must visit for modular kitchen. Very Happy with their service. It was seamless from starting to the end. Highly recommendable..!! Thanks a ton Nomatic Kitchens !",
+    rating: 5,
+    author: "Rajesh Garg",
+    location: "Punjab",
+  },
+  {
+    id: "5",
+    category: "Complete Interior",
+    text: "Best place to get your new kitchen and wardrobe designed I as an Architect strongly recommend them. the best place if ur thinking to renovate or build a new home. They've got what u need. Modular kitchens, tiles etc. the staff is awesome.",
+    rating: 5,
+    author: "Paras Luthra",
+    location: "Architect",
+  },
+  {
+    id: "6",
+    category: "Modular kitchen",
+    text: "I love the kitchen designs Nomatic has. Great quality too! best interior and modular kitchen in tricity. Superb work. Very impressive. Professional people with quality work 100% recommended.",
+    rating: 5,
+    author: "Archana Sharma",
+    location: "Tricity",
+  },
+];

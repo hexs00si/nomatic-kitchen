@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
