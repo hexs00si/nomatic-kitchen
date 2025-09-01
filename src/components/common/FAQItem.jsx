@@ -13,22 +13,22 @@ const FAQItem = ({ id, question, answer, index }) => {
   };
 
   return (
-    <div className="bg-brand-dark-secondary rounded-lg mb-4 overflow-hidden">
+    <div className="bg-brand-dark-secondary rounded-lg mb-3 sm:mb-4 overflow-hidden">
       <button
         onClick={toggleOpen}
-        className="w-full py-6 px-6 flex items-center justify-between text-left hover:bg-opacity-80 transition-colors duration-300"
+        className="w-full py-4 sm:py-6 px-4 sm:px-6 flex items-center justify-between text-left hover:bg-opacity-80 transition-colors duration-300"
       >
-        <div className="flex items-center gap-4">
-          <span className="text-brand-identity font-bold text-lg">
+        <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+          <span className="text-brand-identity font-bold text-sm sm:text-lg flex-shrink-0">
             {formatIndex(index + 1)}
           </span>
-          <span className="text-brand-light font-medium text-lg">
+          <span className="text-brand-light font-medium text-sm sm:text-lg truncate">
             {question}
           </span>
         </div>
-        <div className="ml-4">
+        <div className="ml-3 sm:ml-4 flex-shrink-0">
           <svg
-            className={`w-6 h-6 text-brand-light transition-transform duration-300 ${
+            className={`w-5 h-5 sm:w-6 sm:h-6 text-brand-light transition-transform duration-300 ${
               isOpen ? "rotate-90" : ""
             }`}
             fill="none"
@@ -50,9 +50,9 @@ const FAQItem = ({ id, question, answer, index }) => {
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-6 pb-6 pt-2">
-          <div className="pl-10">
-            <p className="text-gray-300 leading-relaxed">{answer}</p>
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-2">
+          <div className="pl-6 sm:pl-10">
+            <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{answer}</p>
           </div>
         </div>
       </div>

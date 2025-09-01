@@ -10,10 +10,9 @@ export default function Home() {
   return (
     <main className="relative overflow-hidden">
       <HomeSectionHero />
-      {/* <HomeMeetNomatic /> */}
       <HomeOurServices />
-      <HomeOurHappyClients />
       <HomeOurProjects />
+      <HomeOurHappyClients />
       <HomeFAQ />
     </main>
   )

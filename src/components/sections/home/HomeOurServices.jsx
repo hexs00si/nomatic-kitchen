@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 const HomeOurServices = () => {
   return (
     <motion.section
-      className="bg-brand-background min-h-screen flex items-center py-8 lg:py-20 px-4"
+      className="bg-brand-background min-h-screen flex items-center py-8 sm:py-12 lg:py-20 px-4 sm:px-6"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -16,14 +16,14 @@ const HomeOurServices = () => {
     >
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
-          className="mb-8 lg:mb-12"
+          className="mb-8 sm:mb-10 lg:mb-12"
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
           <motion.h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-brand-dark"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-brand-dark"
             whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
           >
             <span className="text-brand-identity">/</span> Our Services

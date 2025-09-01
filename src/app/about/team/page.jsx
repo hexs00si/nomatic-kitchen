@@ -2,20 +2,19 @@
 
 'use client'
 
-import AboutTeamIntro from '@/components/sections/about-team/AboutTeamIntro'
+import FollowUsMarqueeStripe from '@/components/marque-stripes/FollowUsMarqueeStripe'
+import NomaticMarqueeStripe from '@/components/marque-stripes/NomaticMarqueeStripe'
 import AboutTeamBentoGrid from '@/components/sections/about-team/AboutTeamBentoGrid'
 import AboutTeamCareers from '@/components/sections/about-team/AboutTeamCareers'
+import AboutTeamIntro from '@/components/sections/about-team/AboutTeamIntro'
 
 const AboutTeamPage = () => {
   return (
     <main className="relative overflow-hidden">
-      {/* 1. Intro Section */}
       <AboutTeamIntro />
-      
-      {/* 2. Bento Grid */}
+      <NomaticMarqueeStripe />
       <AboutTeamBentoGrid />
-      
-      {/* 3. Careers */}
+      <FollowUsMarqueeStripe/>
       <AboutTeamCareers />
     </main>
   )

@@ -10,17 +10,17 @@ const TestimonialCard = ({
     <div
       className={`
         bg-gradient-to-br from-brand-dark via-brand-dark-secondary to-brand-dark
-        border border-gray-700 rounded-2xl p-6 text-white
-        min-h-[380px] flex flex-col justify-between
+        border border-gray-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white
+        min-h-[280px] sm:min-h-[380px] flex flex-col justify-between
         ${className}
       `}
     >
       <div>
-        <div className="inline-block border border-gray-200/20 bg-gray-700/50 rounded-md px-3 py-1 mb-4">
+        <div className="inline-block border border-gray-200/20 bg-gray-700/50 rounded-md px-2 sm:px-3 py-1 mb-3 sm:mb-4">
           <span className="text-xs text-gray-300">{category}</span>
         </div>
 
-        <p className="text-sm leading-relaxed text-gray-100 mb-6">{text}</p>
+        <p className="text-xs sm:text-sm leading-relaxed text-gray-100 mb-4 sm:mb-6">{text}</p>
       </div>
 
       <div className="flex items-center justify-between">
@@ -28,7 +28,7 @@ const TestimonialCard = ({
           {Array.from({ length: 5 }, (_, i) => (
             <svg
               key={i}
-              className={`w-4 h-4 ${
+              className={`w-3 h-3 sm:w-4 sm:h-4 ${
                 i < rating ? "text-yellow-400" : "text-gray-600"
               }`}
               fill="currentColor"
@@ -39,7 +39,7 @@ const TestimonialCard = ({
           ))}
         </div>
 
-        <p className="text-xs text-brand-identity/80 font-medium">~ {author}</p>
+        <p className="text-xs sm:text-xs text-brand-identity/80 font-medium">~ {author}</p>
       </div>
     </div>
   );

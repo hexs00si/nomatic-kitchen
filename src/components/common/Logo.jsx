@@ -16,7 +16,7 @@ import Link from 'next/link';
 const Logo = ({ 
   width = 160, 
   height = 36, 
-  className = "h-9 w-auto", 
+  className = "h-8 sm:h-9 w-auto", 
   priority = true,
   isLink = false,
   href = "/",

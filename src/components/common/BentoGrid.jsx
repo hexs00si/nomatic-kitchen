@@ -2,7 +2,7 @@ import BentoCard from "./BentoCard";
 
 const BentoGrid = ({ services }) => {
   return (
-    <div className="grid grid-cols-12 gap-4 w-full h-[60vh]">
+    <div className="grid grid-cols-12 gap-2 sm:gap-3 lg:gap-4 w-full h-[50vh] sm:h-[55vh] lg:h-[60vh]">
       {services.map((service, index) => {
         let gridClass = "";
 

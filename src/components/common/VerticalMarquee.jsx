@@ -9,9 +9,8 @@ const VerticalMarquee = ({
     direction === "up" ? "animate-marquee-up" : "animate-marquee-down";
 
   return (
-    <div className="relative h-[800px] overflow-hidden">
-      <div className={`flex flex-col space-y-4 ${animationClass}`}>
-        {/* First set of testimonials */}
+    <div className="relative h-[600px] sm:h-[700px] lg:h-[800px] overflow-hidden">
+      <div className={`flex flex-col space-y-3 sm:space-y-4 ${animationClass}`}>
         {testimonials.map((testimonial) => (
           <TestimonialCard
             key={`first-${testimonial.id}`}
@@ -19,10 +18,9 @@ const VerticalMarquee = ({
             text={testimonial.text}
             rating={testimonial.rating}
             author={testimonial.author}
-            className="w-80 flex-shrink-0"
+            className="w-64 sm:w-72 lg:w-80 flex-shrink-0"
           />
         ))}
-        {/* Duplicate for seamless loop */}
         {testimonials.map((testimonial) => (
           <TestimonialCard
             key={`second-${testimonial.id}`}
@@ -30,7 +28,7 @@ const VerticalMarquee = ({
             text={testimonial.text}
             rating={testimonial.rating}
             author={testimonial.author}
-            className="w-80 flex-shrink-0"
+            className="w-64 sm:w-72 lg:w-80 flex-shrink-0"
           />
         ))}
       </div>

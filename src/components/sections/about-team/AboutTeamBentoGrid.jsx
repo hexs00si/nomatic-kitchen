@@ -1,76 +1,75 @@
 "use client";
 
-import { motion } from "framer-motion";
+import ThreeBrandingDots from "@/components/common/ThreeBrandingDots";
 import { aboutTeamData } from "@/data/aboutTeam";
-import Heading from "@/components/texts/Heading";
+import { motion } from "framer-motion";
 
 const TeamBentoCard = ({ item, className = "" }) => {
-  const getGridClass = (gridSpan) => {
-    switch (gridSpan) {
-      case "large":
-        return "col-span-12 md:col-span-6 lg:col-span-5 row-span-2";
-      case "medium":
-        return "col-span-12 md:col-span-6 lg:col-span-4 row-span-1";
-      case "small":
-        return "col-span-12 sm:col-span-6 lg:col-span-3";
-      default:
-        return "col-span-12 sm:col-span-6 lg:col-span-4";
-    }
-  };
-
   return (
-    <motion.div
+    <div
       className={`
-        relative rounded-2xl overflow-hidden h-64 lg:h-80
-        group cursor-pointer transform transition-all duration-500
-        hover:scale-[1.02] hover:shadow-2xl
-        ${getGridClass(item.gridSpan)} ${className}
+        relative rounded-2xl overflow-hidden
+        hover:shadow-xl transition-all duration-500 ease-out
+        flex flex-col justify-end
+        h-full
+        group cursor-pointer
+        transform hover:scale-[1.02]
+        ${className}
       `}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
     >
-      {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat 
                    transition-transform duration-700 ease-out
                    group-hover:scale-110"
         style={{ backgroundImage: `url(${item.image})` }}
-      />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent
-                      group-hover:from-black/90 group-hover:via-black/50 transition-all duration-300" />
+      >
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300"></div>
+      </div>
 
-      {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-end p-6">
-        <motion.h3
-          className="text-xl lg:text-2xl font-bold text-white mb-2 
-                     group-hover:text-brand-identity transition-colors duration-300"
-          whileHover={{ x: 5 }}
-        >
+      <div className="relative z-10 p-4 lg:p-6 text-white transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
+        <h3 className="text-lg lg:text-xl font-bold mb-2 group-hover:text-brand-identity transition-colors duration-300">
           {item.title}
-        </motion.h3>
-        <motion.p
-          className="text-white/90 text-sm lg:text-base leading-relaxed
-                     group-hover:text-white transition-colors duration-300"
-          whileHover={{ x: 5 }}
-        >
+        </h3>
+        <p className="text-white/90 group-hover:text-white text-xs lg:text-sm leading-relaxed transition-colors duration-300">
           {item.description}
-        </motion.p>
+        </p>
 
         {/* Hover indicator */}
-        <motion.div
-          className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          initial={{ x: -10 }}
-          whileHover={{ x: 0 }}
-        >
-          <div className="w-12 h-0.5 bg-brand-identity"></div>
-        </motion.div>
+        <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="text-brand-identity text-sm font-medium">
+            Meet Team →
+          </span>
+        </div>
       </div>
-    </motion.div>
+    </div>
+  );
+};
+
+const TeamBentoGrid = ({ teamItems }) => {
+  return (
+    <div className="grid grid-cols-12 gap-4 w-full h-[60vh]">
+      {teamItems.map((item, index) => {
+        let gridClass = "";
+
+        if (index === 0) {
+          gridClass = "col-span-12 md:col-span-6 lg:col-span-4 row-span-2";
+        } else if (index === 1) {
+          gridClass = "col-span-12 md:col-span-6 lg:col-span-4";
+        } else if (index === 2) {
+          gridClass = "col-span-12 md:col-span-6 lg:col-span-4 row-span-2";
+        } else if (index === 3) {
+          gridClass = "col-span-12 sm:col-span-6 lg:col-span-4";
+        } else if (index === 4) {
+          gridClass = "col-span-12 sm:col-span-6 lg:col-span-12";
+        } else {
+          gridClass = "col-span-12 sm:col-span-6 lg:col-span-4";
+        }
+
+        return (
+          <TeamBentoCard key={item.id} item={item} className={gridClass} />
+        );
+      })}
+    </div>
   );
 };
 
@@ -78,41 +77,60 @@ const AboutTeamBentoGrid = () => {
   const { bentoGrid } = aboutTeamData;
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+    <motion.section
+      className="bg-brand-background min-h-screen flex items-center py-8 sm:py-12 lg:py-20 px-4 sm:px-6"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+    >
+      <div className="max-w-7xl mx-auto w-full">
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          className="mb-8 sm:mb-10 lg:mb-12"
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <Heading
-            variant="lg"
-            isSlashed={true}
-            dark={false}
-            className="mb-4"
+          <motion.h2
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-brand-dark"
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
           >
-            {bentoGrid.title}
-          </Heading>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <span className="text-brand-identity">/</span> {bentoGrid.title}
+          </motion.h2>
+          <p className="text-lg lg:text-xl text-gray-600 max-w-2xl mt-4">
             Meet the talented individuals who make magic happen
           </p>
         </motion.div>
-
-        {/* Bento Grid */}
-        <div className="grid grid-cols-12 gap-6">
-          {bentoGrid.items.map((item, index) => (
-            <TeamBentoCard
-              key={item.id}
-              item={item}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            />
-          ))}
-        </div>
+        <motion.div
+          className="relative"
+          initial={{ y: 100, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+          >
+            <TeamBentoGrid teamItems={bentoGrid.items} />
+          </motion.div>
+          <motion.div
+            className="absolute -bottom-8 lg:-bottom-16 right-0"
+            initial={{ rotate: 0, scale: 0 }}
+            whileInView={{ rotate: 360, scale: 1 }}
+            transition={{ duration: 1, delay: 0.8, type: "spring" }}
+            viewport={{ once: true }}
+            whileHover={{
+              rotate: 720,
+              scale: 1.1,
+              transition: { duration: 0.5 },
+            }}
+          >
+            <ThreeBrandingDots />
+          </motion.div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

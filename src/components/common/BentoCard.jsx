@@ -23,17 +23,17 @@ const BentoCard = ({ service, className = "" }) => {
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-300"></div>
       </div>
 
-      <div className="relative z-10 p-4 lg:p-6 text-white transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
-        <h3 className="text-lg lg:text-xl font-bold mb-2 group-hover:text-brand-identity transition-colors duration-300">
+      <div className="relative z-10 p-3 sm:p-4 lg:p-6 text-white transform translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
+        <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-1 sm:mb-2 group-hover:text-brand-identity transition-colors duration-300">
           {service.title}
         </h3>
-        <p className="text-white/90 group-hover:text-white text-xs lg:text-sm leading-relaxed transition-colors duration-300">
+        <p className="text-white/90 group-hover:text-white text-xs sm:text-xs lg:text-sm leading-relaxed transition-colors duration-300">
           {service.description}
         </p>
 
         {/* Hover indicator */}
-        <div className="mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="text-brand-identity text-sm font-medium">
+        <div className="mt-2 sm:mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="text-brand-identity text-xs sm:text-sm font-medium">
             Learn More →
           </span>
         </div>

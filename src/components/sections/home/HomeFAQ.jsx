@@ -8,25 +8,25 @@ import Heading from "../../texts/Heading";
 const HomeFAQ = () => {
   return (
     <motion.section
-      className="bg-black py-16"
+      className="bg-black py-8 sm:py-12 lg:py-16"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="mb-12"
+          className="mb-8 sm:mb-10 lg:mb-12"
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <Heading variant="lg" isSlashed={true} dark={true} className="mb-4">
+          <Heading variant="lg" isSlashed={true} dark={true} className="mb-4 text-center sm:text-left">
             FAQ
           </Heading>
           <motion.p
-            className="text-white text-lg"
+            className="text-white text-base sm:text-lg lg:text-xl text-center sm:text-left"
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}

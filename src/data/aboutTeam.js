@@ -1,53 +1,59 @@
-
-
 export const aboutTeamData = {
   hero: {
-    title: "The People Behind the Precision",
+    title: "Crafting Excellence Through Expertise",
     subtitle: "Our Team",
     description:
-      "At Nomatic, every space we design is the result of our people with genuine passion and relentless attention to detail. Our team combines creative intuition with technical expertise. From spatial designers and craftsmen to project leads and engineers, all working in sync to turn your dreams into reality. We are dreamers, thinkers and builders. We construct experiences, not just interiors.",
+      "Behind every custom kitchen and handcrafted furniture piece at Nomatic lies a team of passionate artisans and skilled craftspeople. Our designers understand wood like poets understand words, our carpenters shape timber with surgical precision, and our finishers bring each piece to life with meticulous attention to detail. We don't just build furniture—we craft heirloom pieces that tell your story.",
+    // Hero section background images - Luxury Home Interiors
+    heroImages: [
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // Luxury modern kitchen
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // Elegant living room
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // Premium dining space
+      "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80", // Luxury bedroom interior
+      "https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"  // High-end furniture showcase
+    ]
   },
   bentoGrid: {
     title: "Our Team",
     items: [
       {
-        id: "designers",
-        title: "Spatial Designers",
-        description: "Creative minds who transform your vision into reality",
+        id: "master-carpenters",
+        title: "Master Carpenters",
+        description: "Traditional joinery techniques meet modern precision in every cut and curve",
         image:
-          "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         gridSpan: "large",
       },
       {
-        id: "craftsmen",
-        title: "Master Craftsmen",
-        description: "Skilled artisans with decades of experience",
+        id: "wood-designers",
+        title: "Wood Designers",
+        description: "Visionaries who see potential in every grain pattern and wood species",
         image:
-          "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         gridSpan: "medium",
       },
       {
-        id: "engineers",
-        title: "Technical Engineers",
-        description: "Precision and innovation in every detail",
+        id: "furniture-craftsmen",
+        title: "Furniture Craftsmen",
+        description: "Specialists in custom cabinetry and bespoke furniture creation",
         image:
-          "https://images.unsplash.com/photo-1581092795442-0c0e4c16c3ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         gridSpan: "small",
       },
       {
-        id: "project-leads",
-        title: "Project Leads",
-        description: "Managing your project from start to finish",
+        id: "finishing-specialists",
+        title: "Finishing Specialists",
+        description: "Artists who bring out the natural beauty in every wood surface",
         image:
-          "https://images.unsplash.com/photo-1556909114-45e86e61ea0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          "https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         gridSpan: "small",
       },
       {
-        id: "quality-team",
-        title: "Quality Assurance",
-        description: "Ensuring excellence in every installation",
+        id: "kitchen-designers",
+        title: "Kitchen Designers",
+        description: "Experts in creating functional and beautiful culinary spaces",
         image:
-          "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+          "https://images.unsplash.com/photo-1586953208448-b95a79798f07?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
         gridSpan: "medium",
       },
     ],
@@ -56,7 +62,7 @@ export const aboutTeamData = {
     title: "Careers",
     subtitle: "Craft With Us. Grow With Us.",
     description:
-      "We're always seeking curious minds, skilled hands and people with passion. If you're a designer, technician, or storyteller, who believes in making spaces that have purpose and— we'd love to meet you!",
-    contactInfo: "Reach out to us (insert email/google form)",
+      "We're always seeking skilled craftspeople, innovative designers, and passionate woodworkers who share our dedication to excellence. If you have an eye for detail, hands that understand wood, and a heart for creating beautiful, functional spaces—we'd love to meet you!",
+    contactInfo: "Reach out to us at careers@nomatic.com",
   },
 };
