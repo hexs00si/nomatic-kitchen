@@ -72,14 +72,14 @@ export default function FindShowroomSection() {
               >
                 <div className="space-y-1 sm:space-y-2">
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-700 font-medium">
-                    Plot No. 1210, JLPL,
+                    Plot No. 11, JLPL,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-700 font-medium">
                     Industrial Park Sector 82,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold">
                     <span className="text-[#EB1B26]">Mohali, Punjab</span> 
-                    <span className="text-gray-700"> - 140308.</span>
+                    <span className="text-gray-700"> - 140306.</span>
                   </p>
                 </div>
                 

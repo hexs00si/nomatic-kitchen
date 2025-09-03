@@ -27,7 +27,7 @@ export const faqData = [
     id: 5,
     question: "Do you have a physical showroom where I can see your work?",
     answer:
-      "Yes! Visit our Experience Studio at Plot No. 11, Sector 82, Mohali, Punjab - 140308. Here you can explore our premium collections, experience our craftsmanship firsthand, and interact with our expert team."
+      "Yes! Visit our Experience Studio at Plot No. 11, Sector 82, Mohali, Punjab - 140306. Here you can explore our premium collections, experience our craftsmanship firsthand, and interact with our expert team."
   },
   {
     id: 6,
