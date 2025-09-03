@@ -3,7 +3,7 @@ export const faqData = [
     id: 1,
     question: "What services does Nomatic offer?",
     answer:
-      "We provide custom modular kitchens, tailored wardrobes, luxury vanities, entertainment bars, and TV panels. Our services include consultation, 3D design, manufacturing, installation, and after-sales support."
+      "We cater to all your interior needs, offering custom modular kitchens, tailored wardrobes, furniture, luxury vanities, customized bars, TV panels, doors, and more. Our comprehensive services include consultation, 3D design, manufacturing, installation, and after-sales support."
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const faqData = [
     id: 5,
     question: "Do you have a physical showroom where I can see your work?",
     answer:
-      "Yes! Visit our Experience Studio at Plot No. 1210, JLPL Industrial Park, Sector 82, Mohali, Punjab - 140308. Here you can explore our premium collections, experience our craftsmanship firsthand, and interact with our expert design team."
+      "Yes! Visit our Experience Studio at Plot No. 11, Sector 82, Mohali, Punjab - 140308. Here you can explore our premium collections, experience our craftsmanship firsthand, and interact with our expert team."
   },
   {
     id: 6,
