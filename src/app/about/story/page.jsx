@@ -6,6 +6,7 @@ import NomaticMarqueeStripe from '@/components/marque-stripes/NomaticMarqueeStri
 import AboutDirectorWords from '@/components/sections/about-story/AboutDirectorWords'
 import AboutStoryFactory from '@/components/sections/about-story/AboutStoryFactory'
 import AboutStoryPageHero from '@/components/sections/about-story/AboutStoryPageHero'
+import HomeMeetNomatic from '@/components/sections/home/HomeMeetNomatic'
 
 const AboutStoryPage = () => {
   return (

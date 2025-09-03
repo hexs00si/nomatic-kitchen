@@ -1,8 +1,15 @@
 "use client";
 
 import { meetNomaticContent, meetNomaticSection } from "@/data/meetNomatic";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
+
+// Register ScrollTrigger plugin
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const LetterByLetterText = ({
   text,
@@ -14,19 +21,10 @@ const LetterByLetterText = ({
   const totalChars = text.length;
 
   useEffect(() => {
-    // Direct progress value instead of motion value
-    if (typeof progress === 'number') {
-      const newVisibleCount = Math.round(progress * totalChars);
-      setVisibleCount(Math.max(0, Math.min(newVisibleCount, totalChars)));
-    } else {
-      const unsubscribe = progress.onChange((latest) => {
-        const newVisibleCount = Math.round(latest * totalChars);
-        setVisibleCount(Math.max(0, Math.min(newVisibleCount, totalChars)));
-      });
-
-      return unsubscribe;
-    }
+    const newVisibleCount = Math.round(progress * totalChars);
+    setVisibleCount(Math.max(0, Math.min(newVisibleCount, totalChars)));
   }, [progress, totalChars]);
+
   const renderText = () => {
     const chars = text.split("");
 
@@ -78,64 +76,93 @@ const LetterByLetterText = ({
 
 const HomeMeetNomatic = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [paragraphProgress, setParagraphProgress] = useState([]);
+  const [paragraphProgress, setParagraphProgress] = useState(
+    new Array(meetNomaticContent.length).fill(0)
+  );
+  
   const containerRef = useRef(null);
   const stickyRef = useRef(null);
-  const textRefs = useRef([]);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+  const scrollTriggerRef = useRef(null);
 
   useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((latest) => {
-      const totalParagraphs = meetNomaticContent.length;
-      const newParagraphProgress = [];
-      let newActiveIndex = 0;
+    const container = containerRef.current;
+    const sticky = stickyRef.current;
 
-      // Calculate progress for each paragraph
-      for (let i = 0; i < totalParagraphs; i++) {
-        const paragraphStart = i / totalParagraphs;
-        const paragraphEnd = (i + 1) / totalParagraphs;
-        
-        if (latest <= paragraphStart) {
-          newParagraphProgress[i] = 0;
-        } else if (latest >= paragraphEnd) {
-          newParagraphProgress[i] = 1;
-          newActiveIndex = i;
-        } else {
-          const paragraphLocalProgress = (latest - paragraphStart) / (paragraphEnd - paragraphStart);
-          newParagraphProgress[i] = paragraphLocalProgress;
-          newActiveIndex = i;
-        }
-      }
+    if (!container || !sticky) return;
 
-      // Only move to next paragraph if current one is complete
-      for (let i = 0; i < totalParagraphs; i++) {
-        if (newParagraphProgress[i] < 1) {
-          newActiveIndex = i;
-          break;
-        }
-        if (i === totalParagraphs - 1) {
-          newActiveIndex = i;
-        }
-      }
-
-      setParagraphProgress(newParagraphProgress);
-      if (newActiveIndex !== activeIndex) {
-        setActiveIndex(newActiveIndex);
-      }
+    // Create a timeline for the entire animation
+    const tl = gsap.timeline({
+      ease: "none",
     });
 
-    return unsubscribe;
-  }, [activeIndex, scrollYProgress]);
+    // Set up scroll trigger
+    scrollTriggerRef.current = ScrollTrigger.create({
+      trigger: container,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1, // Smooth scrubbing
+      pin: sticky,
+      pinSpacing: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const totalParagraphs = meetNomaticContent.length;
+        
+        // Calculate progress for each paragraph
+        const newParagraphProgress = [];
+        let newActiveIndex = 0;
+
+        for (let i = 0; i < totalParagraphs; i++) {
+          const paragraphStart = i / totalParagraphs;
+          const paragraphEnd = (i + 1) / totalParagraphs;
+          
+          if (progress <= paragraphStart) {
+            newParagraphProgress[i] = 0;
+          } else if (progress >= paragraphEnd) {
+            newParagraphProgress[i] = 1;
+            newActiveIndex = i;
+          } else {
+            const paragraphLocalProgress = (progress - paragraphStart) / (paragraphEnd - paragraphStart);
+            newParagraphProgress[i] = paragraphLocalProgress;
+            newActiveIndex = i;
+          }
+        }
+
+        // Update active index based on which paragraph is currently being animated
+        for (let i = 0; i < totalParagraphs; i++) {
+          if (newParagraphProgress[i] > 0 && newParagraphProgress[i] < 1) {
+            newActiveIndex = i;
+            break;
+          }
+          if (i === totalParagraphs - 1 && newParagraphProgress[i] === 1) {
+            newActiveIndex = i;
+          }
+        }
+
+        setParagraphProgress(newParagraphProgress);
+        setActiveIndex(newActiveIndex);
+      },
+    });
+
+    return () => {
+      if (scrollTriggerRef.current) {
+        scrollTriggerRef.current.kill();
+      }
+      ScrollTrigger.refresh();
+    };
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   return (
-    <div ref={containerRef} className="relative h-[600vh]">
+    <div ref={containerRef} className="relative h-[400vh]">
       <div
         ref={stickyRef}
-        className="sticky top-0 h-screen bg-brand-dark text-white overflow-hidden"
+        className="h-screen bg-brand-dark text-white overflow-hidden"
       >
         <div className="max-w-7xl mx-auto px-4 h-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center h-full">
@@ -150,21 +177,17 @@ const HomeMeetNomatic = () => {
                 {meetNomaticSection.title.split(" ")[0]} NOM
                 <span className="text-brand-identity">A</span>TIC
               </motion.h2>
+              
               <div className="space-y-8">
                 {meetNomaticContent.map((content, index) => {
                   const text = content.text;
                   const highlightWord = content.highlight;
-
-                  // Use direct progress value
                   const currentProgress = paragraphProgress[index] || 0;
 
                   return (
                     <motion.div
                       key={content.id}
                       className="relative"
-                      ref={(el) => {
-                        textRefs.current[index] = el;
-                      }}
                     >
                       <div className="flex items-start gap-4">
                         <div
@@ -182,26 +205,6 @@ const HomeMeetNomatic = () => {
                           />
                         </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-              <div className="flex space-x-2 pt-8">
-                {meetNomaticContent.map((_, index) => {
-                  const currentProgress = paragraphProgress[index] || 0;
-
-                  return (
-                    <motion.div
-                      key={index}
-                      className="h-1 rounded-full bg-gray-600 relative overflow-hidden"
-                      style={{ width: 32 }}
-                    >
-                      <motion.div
-                        className="absolute inset-0 bg-brand-identity rounded-full origin-left"
-                        style={{
-                          scaleX: currentProgress,
-                        }}
-                      />
                     </motion.div>
                   );
                 })}

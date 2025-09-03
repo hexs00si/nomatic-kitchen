@@ -1,9 +1,9 @@
 "use client";
 
 import ThreeBrandingDots from "@/components/common/ThreeBrandingDots";
-import Heading from "@/components/texts/Heading";
 import { whyNomaticData } from "@/data/homeVisionMission";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 const WhyNomaticCard = ({ reason, className = "", delay = 0 }) => (
   <motion.div
@@ -53,6 +53,29 @@ const WhyNomaticCard = ({ reason, className = "", delay = 0 }) => (
 
 const HomeWhyNomatic = () => {
   const { title, subtitle, description, reasons } = whyNomaticData;
+  const titleRef = useRef(null);
+
+  // Animated title with staggered character reveal
+  const AnimatedTitle = ({ text, className = "" }) => {
+    const chars = text.split('').map((char, index) => (
+      <motion.span
+        key={index}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ 
+          duration: 0.5, 
+          delay: index * 0.05,
+          ease: [0.25, 0.46, 0.45, 0.94]
+        }}
+        viewport={{ once: true }}
+        className={`inline-block ${char === ' ' ? 'mr-2' : ''} ${className}`}
+      >
+        {char === ' ' ? '\u00A0' : char}
+      </motion.span>
+    ));
+
+    return <div className="overflow-hidden">{chars}</div>;
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -86,25 +109,35 @@ const HomeWhyNomatic = () => {
           variants={containerVariants}
           viewport={{ once: true }}
         >
-          {/* Header */}
+          {/* Header with Animated Title */}
           <motion.div
             className="text-center mb-16"
             variants={itemVariants}
           >
-            <Heading
-              variant="lg"
-              isSlashed={true}
-              dark={false}
-              className="mb-4"
+            <div className="mb-4">
+              <AnimatedTitle 
+                text={title}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand-dark"
+              />
+            </div>
+            <motion.h3 
+              className="text-2xl font-bold text-brand-dark mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
             >
-              {title}
-            </Heading>
-            <h3 className="text-2xl font-bold text-brand-dark mb-6">
               {subtitle}
-            </h3>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            </motion.h3>
+            <motion.p 
+              className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              viewport={{ once: true }}
+            >
               {description}
-            </p>
+            </motion.p>
           </motion.div>
 
           {/* Bento Grid */}

@@ -10,6 +10,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0 })
+  const [mobileExpandedItems, setMobileExpandedItems] = useState({})
   const navRef = useRef(null)
   const containerRef = useRef(null)
   const dropdownRef = useRef(null)
@@ -93,7 +94,19 @@ export default function Navbar() {
   }
 
   /* -------------------------------------------------- helpers */
-  const toggle = () => setOpen((p) => !p)
+    const toggle = () => {
+    setOpen(prev => !prev)
+    if (open) {
+      setMobileExpandedItems({}) // Reset expanded items when closing menu
+    }
+  }
+
+  const toggleMobileSubmenu = (item) => {
+    setMobileExpandedItems(prev => ({
+      ...prev,
+      [item]: !prev[item]
+    }))
+  }
 
   const handleMouseEnter = (item) => {
     if (menuData[item]) {
@@ -140,9 +153,9 @@ export default function Navbar() {
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggle() }}
           className="absolute left-4 flex h-6 w-6 flex-col justify-between focus:outline-none focus:ring-2 focus:ring-white/50 rounded-sm"
         >
-          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? 'translate-y-[7px] rotate-45' : ''}`} />
+          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? 'translate-y-[11px] rotate-45' : ''}`} />
           <span className={`h-0.5 w-full bg-white transition-opacity duration-300 ${open ? 'opacity-0' : 'opacity-100'}`} />
-          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? '-translate-y-[7px] -rotate-45' : ''}`} />
+          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? '-translate-y-[11px] -rotate-45' : ''}`} />
         </button>
 
         <Logo
@@ -150,10 +163,12 @@ export default function Navbar() {
           height={32}
           className="h-8 w-auto"
           priority
+          isLink={true}
+          href="/"
         />
       </header>
 
-      {/* BACKDROP MENU with animation - FIXED: Use Link instead of anchor */}
+      {/* MOBILE BACKDROP MENU with expandable sublinks */}
       <AnimatePresence>
         {open && (
           <motion.nav
@@ -162,26 +177,99 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-7 bg-black/90 backdrop-blur-lg"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-start pt-20 px-6 bg-black/90 backdrop-blur-lg overflow-y-auto"
           >
-            {navLinks.map((item) => (
-              <Link 
-                key={item}
-                href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                onClick={toggle}
-                className="text-2xl font-light tracking-wide text-white hover:text-gray-200 transition-colors duration-200"
-              >
-                {item}
-              </Link>
-            ))}
+            <div className="flex flex-col items-center space-y-4 w-full max-w-sm">
+              {navLinks.map((item) => {
+                const hasSubmenu = menuData[item] && menuData[item].length > 0;
+                const isExpanded = mobileExpandedItems[item];
+                
+                return (
+                  <div key={item} className="w-full">
+                    <div className="flex items-center justify-between w-full">
+                      {hasSubmenu ? (
+                        <button
+                          onClick={() => toggleMobileSubmenu(item)}
+                          className="flex-1 text-left text-2xl font-light tracking-wide text-white hover:text-gray-200 transition-colors duration-200"
+                        >
+                          {item}
+                        </button>
+                      ) : (
+                        <Link 
+                          href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                          onClick={toggle}
+                          className="flex-1 text-left text-2xl font-light tracking-wide text-white hover:text-gray-200 transition-colors duration-200"
+                        >
+                          {item}
+                        </Link>
+                      )}
+                      
+                      {hasSubmenu && (
+                        <button
+                          onClick={() => toggleMobileSubmenu(item)}
+                          className="ml-3 p-1"
+                          aria-label={`Toggle ${item} submenu`}
+                        >
+                          <svg
+                            className={`w-5 h-5 text-white transition-transform duration-200 ${
+                              isExpanded ? 'rotate-180' : ''
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* Submenu Items */}
+                    {hasSubmenu && (
+                      <AnimatePresence>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 pt-3 space-y-2">
+                              {menuData[item].map((subItem) => (
+                                <Link
+                                  key={subItem.id}
+                                  href={subItem.href}
+                                  onClick={toggle}
+                                  className="block text-lg font-light text-gray-300 hover:text-white transition-colors duration-200 py-1"
+                                >
+                                  {subItem.title}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    )}
+                  </div>
+                );
+              })}
 
-            <Link
-              href={contactInfo.href}
-              onClick={toggle}
-              className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
-            >
-              {contactInfo.label}
-            </Link>
+              <div className="pt-6">
+                <Link
+                  href={contactInfo.href}
+                  onClick={toggle}
+                  className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
+                >
+                  {contactInfo.label}
+                </Link>
+              </div>
+            </div>
           </motion.nav>
         )}
       </AnimatePresence>
@@ -202,6 +290,8 @@ export default function Navbar() {
             height={36}
             className="h-9 w-auto flex-shrink-0"
             priority
+            isLink={true}
+            href="/"
           />
 
           <ul className="ml-8 flex items-center space-x-10">
