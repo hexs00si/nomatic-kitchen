@@ -1,32 +1,38 @@
 export const faqData = [
   {
     id: 1,
-    question: "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et.",
+    question: "What services does Nomatic offer?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus.",
+      "We provide custom modular kitchens, tailored wardrobes, luxury vanities, entertainment bars, and TV panels. Our services include consultation, 3D design, manufacturing, installation, and after-sales support."
   },
   {
     id: 2,
-    question: "Lorem ipsum dolor sit amet consectetur.",
+    question: "Can I customize my kitchen/wardrobe design?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus.",
+      "Absolutely! Every Nomatic project is bespoke. We customize layout, space optimization, materials, and finishes to reflect your individual taste and lifestyle needs."
   },
   {
     id: 3,
-    question: "Lorem ipsum dolor sit amet consectetur.",
+    question: "Do you provide 3D design visualization?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus.",
+      "Yes! Our dedicated in-house design team creates detailed 3D renderings and floor plans with exceptional speed and quality. Unlike competitors who outsource, we ensure faster turnaround times and seamless communication throughout the design process."
   },
   {
     id: 4,
-    question: "Lorem ipsum dolor sit amet consectetur.",
+    question: "Do you handle the complete installation?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus.",
+      "Yes, our expert installation team manages everything from delivery to final setup. We coordinate with other trades if needed and ensure your space is ready for immediate use."
   },
   {
     id: 5,
-    question: "Lorem ipsum dolor sit amet consectetur.",
+    question: "Do you have a physical showroom where I can see your work?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus.",
+      "Yes! Visit our Experience Studio at Plot No. 1210, JLPL Industrial Park, Sector 82, Mohali, Punjab - 140308. Here you can explore our premium collections, experience our craftsmanship firsthand, and interact with our expert design team."
   },
+  {
+    id: 6,
+    question: "Do you offer any warranties?",
+    answer:
+      "Yes, we provide comprehensive warranties on materials and workmanship. Our commitment extends beyond installation with dedicated after-sales service and ongoing support."
+  }
 ];
