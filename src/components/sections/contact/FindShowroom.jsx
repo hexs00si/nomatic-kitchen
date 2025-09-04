@@ -72,14 +72,14 @@ export default function FindShowroomSection() {
               >
                 <div className="space-y-1 sm:space-y-2">
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-700 font-medium">
-                    Plot No. 1210, JLPL,
+                    Plot No. 11, JLPL,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-700 font-medium">
                     Industrial Park Sector 82,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold">
                     <span className="text-[#EB1B26]">Mohali, Punjab</span> 
-                    <span className="text-gray-700"> - 140308.</span>
+                    <span className="text-gray-700"> - 140306.</span>
                   </p>
                 </div>
                 
@@ -112,7 +112,7 @@ export default function FindShowroomSection() {
               {/* Map container with embedded Google Maps */}
               <div className="absolute inset-0 bg-gray-200">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.542686847892!2d76.71649131508164!3d30.663395981657794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390feef36c565b789%3A0x4b3a1b7e098c66d2!2sJLPL%20Industrial%20Park%2C%20Sector%2082%2C%20Mohali%2C%20Punjab%20140308!5e0!3m2!1sen!2sin!4v1692726780123!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3432.0304905272037!2d76.73476769999999!3d30.661269899999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390febfd9df65f9f%3A0x5f89081c227eac6e!2sNomatic%20Kitchens!5e0!3m2!1sen!2sin!4v1756900498720!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -133,18 +133,7 @@ export default function FindShowroomSection() {
                 </div>
               </div>
 
-              {/* Red pin indicator */}
-              <motion.div 
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full z-10 pointer-events-none"
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 1 }}
-              >
-                <div className="relative">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-[#EB1B26] rounded-full shadow-lg"></div>
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[5px] sm:border-l-[6px] border-r-[5px] sm:border-r-[6px] border-t-[6px] sm:border-t-[8px] border-l-transparent border-r-transparent border-t-[#EB1B26]"></div>
-                </div>
-              </motion.div>
+              
             </motion.div>
 
             {/* Open Maps Button and Rotating Slash - Below Map (Mobile Responsive) */}

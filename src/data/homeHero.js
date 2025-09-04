@@ -4,7 +4,7 @@ export const homeHeroData = {
     subtitle: "Modern Nomad"
   },
   description: {
-    right: "Automated For The Modern Nomad",
+    right: "Interiors that speak volume",
     bottom: "Identity , Evolution and Permanence"
   },
   videos: [

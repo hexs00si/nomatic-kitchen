@@ -1,9 +1,9 @@
 // Navbar navigation links
 export const navLinks = [
   'Home', 
-  'Wardrobe', 
   'Kitchen', 
-  'Services', 
+  'Wardrobe', 
+  'Products', 
   'Gallery', 
   'About'
 ];
@@ -63,7 +63,7 @@ export const menuData = {
       description: 'Explore our premium island kitchen collection'
     },
   ],
-  'Services': [
+  'Products': [
     { 
       id: 1, 
       title: '3D Design', 
@@ -130,13 +130,6 @@ export const menuData = {
       image: '/images/about-2.jpg', 
       href: '/about/team',
       description: 'Explore our premium our team collection'
-    },
-    { 
-      id: 3, 
-      title: 'Certifications', 
-      image: '/images/about-3.jpg', 
-      href: '/about/certifications',
-      description: 'Explore our premium certifications collection'
     },
   ]
 };
