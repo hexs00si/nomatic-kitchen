@@ -1,14 +1,9 @@
 "use client";
 
+import { socialLinks } from "@/data/socialLinks";
 import { motion } from "framer-motion";
 
 const FollowUsMarqueeStripe = () => {
-  const socialLinks = [
-    { name: "INSTAGRAM", handle: "@nomatickitchens" },
-    { name: "FACEBOOK", handle: "/nomatickitchens" },
-    { name: "YOUTUBE", handle: "/nomaticdesigns" },
-    { name: "LINKEDIN", handle: "/company/nomatic" },
-  ];
 
   const MarqueeContent = () => (
     <>

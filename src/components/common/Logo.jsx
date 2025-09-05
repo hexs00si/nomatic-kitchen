@@ -14,9 +14,8 @@ import Link from 'next/link';
  * @param {object} props - Additional props passed to Image component
  */
 const Logo = ({ 
-  width = 160, 
-  height = 36, 
-  className = "h-8 sm:h-9 w-auto", 
+  width = 120, 
+  height = 20, 
   priority = true,
   isLink = false,
   href = "/",
@@ -29,7 +28,6 @@ const Logo = ({
       alt={brandInfo.logoAlt}
       width={width}
       height={height}
-      className={className}
       priority={priority}
       {...props}
     />

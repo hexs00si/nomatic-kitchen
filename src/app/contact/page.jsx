@@ -12,7 +12,7 @@ export default function ContactPage() {
     <div>
       <WelcomeContact />
       <FindShowroomSection />
-      {/* <ExperienceStudio /> */}
+      <ExperienceStudio />
       <EmailSection />
       <LetsTalkCard /> 
     </div>

@@ -1,145 +1,285 @@
-'use client'
+"use client";
 
-import Logo from '@/components/common/Logo';
-import { contactInfo, menuData, navLinks } from '@/data/navbar';
-import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link'; // Import Link from Next.js
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import Logo from "@/components/common/Logo";
+import Button from "@/components/ui/Button";
+import { contactInfo, menuData, navLinks } from "@/data/navbar";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState(null)
-  const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0 })
-  const [mobileExpandedItems, setMobileExpandedItems] = useState({})
-  const navRef = useRef(null)
-  const containerRef = useRef(null)
-  const dropdownRef = useRef(null)
-  const idle = useRef(null)
-  const scrollRefs = useRef({})
-  const linkRefs = useRef({})
+  const [open, setOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ left: 0, top: 0, width: 1000 });
+  const [mobileExpandedItems, setMobileExpandedItems] = useState({});
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [scrollDirection, setScrollDirection] = useState('up');
+  
+  const navRef = useRef(null);
+  const containerRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const idle = useRef(null);
+  const scrollRefs = useRef({});
+  const linkRefs = useRef({});
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   const calculateDropdownPosition = () => {
-    if (containerRef.current) {
-      const containerRect = containerRef.current.getBoundingClientRect()
-      const dropdownWidth = 1000
+    if (containerRef.current && activeDropdown) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const itemCount = menuData[activeDropdown]?.length || 0;
+      const viewportWidth = window.innerWidth;
       
-      const containerCenter = containerRect.left + (containerRect.width / 2)
-      let left = containerCenter - (dropdownWidth / 2)
+      // Calculate responsive width based on screen size
+      const itemWidth = 320;
+      const gapWidth = 8;
+      const padding = 25; // Reduced from 16 to 8 (4px on each side)
       
-      const minLeft = 20
-      const maxLeft = window.innerWidth - dropdownWidth - 20
-      left = Math.max(minLeft, Math.min(left, maxLeft))
+      // Determine how many items can fit on screen
+      const maxWidth = viewportWidth - 20; // 20px margin on each side
+      const maxItemsPerRow = Math.floor((maxWidth - padding) / (itemWidth + gapWidth));
+      const visibleItems = Math.min(itemCount, maxItemsPerRow);
       
+      // Calculate dropdown width
+      let dropdownWidth;
+      if (itemCount <= visibleItems) {
+        // All items fit - calculate exact width
+        dropdownWidth = itemCount * itemWidth + (itemCount - 1) * gapWidth + padding;
+      } else {
+        // Some items need scrolling - use available width
+        dropdownWidth = visibleItems * itemWidth + (visibleItems - 1) * gapWidth + padding;
+      }
+      
+      // Ensure minimum width and don't exceed screen
+      dropdownWidth = Math.min(maxWidth, Math.max(360, dropdownWidth));
+
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      let left = containerCenter - dropdownWidth / 2;
+
+      const minLeft = 20;
+      const maxLeft = viewportWidth - dropdownWidth -20;
+      left = Math.max(minLeft, Math.min(left, maxLeft));
+
       setDropdownPosition({
         left: left,
-        top: containerRect.bottom + 8
-      })
+        top: containerRect.bottom + 8,
+        width: dropdownWidth
+      });
     }
-  }
+  };
 
   useLayoutEffect(() => {
     if (activeDropdown) {
-      calculateDropdownPosition()
+      calculateDropdownPosition();
     }
-  }, [activeDropdown])
+  }, [activeDropdown]);
 
+  // Enhanced scroll handler with better animation control
   useEffect(() => {
-    const reveal = () => {
-      if (window.innerWidth >= 1024 && containerRef.current) {
-        containerRef.current.style.opacity = '1'
-        containerRef.current.style.transform = 'translateX(-50%) translateY(0)'
-        clearTimeout(idle.current)
-        idle.current = setTimeout(() => {
-          if (!activeDropdown) {
-            containerRef.current.style.opacity = '0'
-            containerRef.current.style.transform = 'translateX(-50%) translateY(-20px)'
-          }
-        }, 3_000)
+    const handleScroll = () => {
+      if (!ticking.current) {
+        requestAnimationFrame(updateNavbar);
+        ticking.current = true;
       }
-    }
+    };
+
+    const updateNavbar = () => {
+      if (window.innerWidth >= 1024 && containerRef.current) {
+        const currentScrollY = window.scrollY;
+        const scrollDifference = currentScrollY - lastScrollY.current;
+        
+        // Determine scroll direction with threshold to avoid jitter
+        if (Math.abs(scrollDifference) > 5) {
+          const newDirection = scrollDifference > 0 ? 'down' : 'up';
+          if (newDirection !== scrollDirection) {
+            setScrollDirection(newDirection);
+          }
+        }
+
+        // Show/hide logic
+        if (currentScrollY < 100) {
+          // Always show at top of page
+          showNavbar();
+        } else if (scrollDirection === 'down' && currentScrollY > lastScrollY.current) {
+          // Hide when scrolling down
+          hideNavbar();
+        } else if (scrollDirection === 'up' && currentScrollY < lastScrollY.current) {
+          // Show when scrolling up
+          showNavbar();
+          startIdleTimer();
+        }
+
+        lastScrollY.current = currentScrollY;
+      }
+      ticking.current = false;
+    };
+
+    const showNavbar = () => {
+      if (containerRef.current) {
+        containerRef.current.style.opacity = "1";
+        containerRef.current.style.transform = "translateX(-50%) translateY(0)";
+        containerRef.current.style.pointerEvents = "auto";
+        setIsNavVisible(true);
+      }
+      clearTimeout(idle.current);
+    };
+
+    const hideNavbar = () => {
+      if (containerRef.current && !activeDropdown) {
+        containerRef.current.style.opacity = "0";
+        containerRef.current.style.transform = "translateX(-50%) translateY(-40px)";
+        containerRef.current.style.pointerEvents = "none";
+        setIsNavVisible(false);
+      }
+      clearTimeout(idle.current);
+    };
+
+    const startIdleTimer = () => {
+      clearTimeout(idle.current);
+      idle.current = setTimeout(() => {
+        if (!activeDropdown && window.scrollY > 100) {
+          hideNavbar();
+        }
+      }, 3000);
+    };
+
+    const handleMouseMove = (e) => {
+      if (window.innerWidth >= 1024) {
+        // Show navbar on mouse movement near top of screen
+        if (e.clientY < 150) {
+          showNavbar();
+          startIdleTimer();
+        }
+      }
+    };
 
     const handleResize = () => {
       if (activeDropdown) {
-        calculateDropdownPosition()
+        calculateDropdownPosition();
       }
-    }
+      // Reset navbar state on resize
+      if (window.innerWidth >= 1024) {
+        showNavbar();
+      }
+    };
 
-    window.addEventListener('mousemove', reveal)
-    window.addEventListener('scroll', reveal)
-    window.addEventListener('resize', handleResize)
-    reveal()
+    // Event listeners
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    // Initial setup
+    if (window.innerWidth >= 1024) {
+      showNavbar();
+      startIdleTimer();
+    }
 
     return () => {
-      window.removeEventListener('mousemove', reveal)
-      window.removeEventListener('scroll', reveal)
-      window.removeEventListener('resize', handleResize)
-      clearTimeout(idle.current)
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(idle.current);
+    };
+  }, [activeDropdown, scrollDirection]);
+
+  // Handle dropdown state changes
+  useEffect(() => {
+    if (activeDropdown) {
+      // Keep navbar visible when dropdown is active
+      if (containerRef.current) {
+        containerRef.current.style.opacity = "1";
+        containerRef.current.style.transform = "translateX(-50%) translateY(0)";
+        containerRef.current.style.pointerEvents = "auto";
+      }
+      clearTimeout(idle.current);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+      // Restart idle timer when dropdown closes
+      if (window.scrollY > 100 && window.innerWidth >= 1024) {
+        idle.current = setTimeout(() => {
+          if (containerRef.current && !activeDropdown) {
+            containerRef.current.style.opacity = "0";
+            containerRef.current.style.transform = "translateX(-50%) translateY(-40px)";
+            containerRef.current.style.pointerEvents = "none";
+          }
+        }, 3000);
+      }
     }
-  }, [activeDropdown])
+  }, [activeDropdown]);
 
   /* -------------------------------------------------- scroll functions */
   const scroll = (direction, menuKey) => {
-    const container = scrollRefs.current[menuKey]
+    const container = scrollRefs.current[menuKey];
     if (container) {
-      const scrollAmount = 280
-      const newScrollLeft = direction === 'left' 
-        ? container.scrollLeft - scrollAmount 
-        : container.scrollLeft + scrollAmount
-      
+      const scrollAmount = 280;
+      const newScrollLeft =
+        direction === "left"
+          ? container.scrollLeft - scrollAmount
+          : container.scrollLeft + scrollAmount;
+
       container.scrollTo({
         left: newScrollLeft,
-        behavior: 'smooth'
-      })
+        behavior: "smooth",
+      });
     }
-  }
+  };
 
   /* -------------------------------------------------- helpers */
-    const toggle = () => {
-    setOpen(prev => !prev)
+  const toggle = () => {
+    setOpen((prev) => !prev);
     if (open) {
-      setMobileExpandedItems({}) // Reset expanded items when closing menu
+      setMobileExpandedItems({}); // Reset expanded items when closing menu
     }
-  }
+  };
 
   const toggleMobileSubmenu = (item) => {
-    setMobileExpandedItems(prev => ({
+    setMobileExpandedItems((prev) => ({
       ...prev,
-      [item]: !prev[item]
-    }))
-  }
+      [item]: !prev[item],
+    }));
+  };
 
   const handleMouseEnter = (item) => {
     if (menuData[item]) {
-      setActiveDropdown(item)
+      setActiveDropdown(item);
     }
-  }
+  };
 
   const handleMouseLeave = () => {
-    setActiveDropdown(null)
-  }
+    setActiveDropdown(null);
+  };
 
   /* -------------------------------------------------- motion variants */
   const backdrop = {
     hidden: { opacity: 0, scaleY: 0, originY: 0 },
-    visible: { opacity: 1, scaleY: 1, transition: { duration: 0.4, ease: 'easeInOut' } },
-    exit: { opacity: 0, scaleY: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
-  }
+    visible: {
+      opacity: 1,
+      scaleY: 1,
+      transition: { duration: 0.4, ease: "easeInOut" },
+    },
+    exit: {
+      opacity: 0,
+      scaleY: 0,
+      transition: { duration: 0.3, ease: "easeInOut" },
+    },
+  };
 
   const dropdown = {
     hidden: { opacity: 0, y: -10, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { duration: 0.2, ease: 'easeOut' }
+      transition: { duration: 0.2, ease: "easeOut" },
     },
-    exit: { 
-      opacity: 0, 
-      y: -10, 
+    exit: {
+      opacity: 0,
+      y: -10,
       scale: 0.95,
-      transition: { duration: 0.15, ease: 'easeIn' }
-    }
-  }
+      transition: { duration: 0.15, ease: "easeIn" },
+    },
+  };
 
   /* -------------------------------------------------- jsx */
   return (
@@ -147,21 +287,33 @@ export default function Navbar() {
       {/* MOBILE / TABLET TOP BAR (≤ lg) */}
       <header className="fixed top-0 left-0 z-50 flex w-full items-center justify-center lg:hidden px-4 py-3 bg-[#1E1F1F]/80 backdrop-blur">
         <button
-          aria-label={open ? 'Close navigation' : 'Open navigation'}
+          aria-label={open ? "Close navigation" : "Open navigation"}
           onClick={toggle}
           tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggle() }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") toggle();
+          }}
           className="absolute left-4 flex h-6 w-6 flex-col justify-between focus:outline-none focus:ring-2 focus:ring-white/50 rounded-sm"
         >
-          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? 'translate-y-[11px] rotate-45' : ''}`} />
-          <span className={`h-0.5 w-full bg-white transition-opacity duration-300 ${open ? 'opacity-0' : 'opacity-100'}`} />
-          <span className={`h-0.5 w-full bg-white transition-all duration-300 ${open ? '-translate-y-[11px] -rotate-45' : ''}`} />
+          <span
+            className={`h-0.5 w-full bg-white transition-all duration-300 ${
+              open ? "translate-y-[11px] rotate-45" : ""
+            }`}
+          />
+          <span
+            className={`h-0.5 w-full bg-white transition-opacity duration-300 ${
+              open ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`h-0.5 w-full bg-white transition-all duration-300 ${
+              open ? "-translate-y-[11px] -rotate-45" : ""
+            }`}
+          />
         </button>
 
         <Logo
-          width={130}
-          height={32}
-          className="h-8 w-auto"
+          className="w-auto object-contain"
           priority
           isLink={true}
           href="/"
@@ -183,7 +335,7 @@ export default function Navbar() {
               {navLinks.map((item) => {
                 const hasSubmenu = menuData[item] && menuData[item].length > 0;
                 const isExpanded = mobileExpandedItems[item];
-                
+
                 return (
                   <div key={item} className="w-full">
                     <div className="flex items-center justify-between w-full">
@@ -195,15 +347,17 @@ export default function Navbar() {
                           {item}
                         </button>
                       ) : (
-                        <Link 
-                          href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                        <Link
+                          href={
+                            item === "Home" ? "/" : `/${item.toLowerCase()}`
+                          }
                           onClick={toggle}
                           className="flex-1 text-left text-2xl font-light tracking-wide text-white hover:text-gray-200 transition-colors duration-200"
                         >
                           {item}
                         </Link>
                       )}
-                      
+
                       {hasSubmenu && (
                         <button
                           onClick={() => toggleMobileSubmenu(item)}
@@ -212,7 +366,7 @@ export default function Navbar() {
                         >
                           <svg
                             className={`w-5 h-5 text-white transition-transform duration-200 ${
-                              isExpanded ? 'rotate-180' : ''
+                              isExpanded ? "rotate-180" : ""
                             }`}
                             fill="none"
                             stroke="currentColor"
@@ -228,16 +382,16 @@ export default function Navbar() {
                         </button>
                       )}
                     </div>
-                    
+
                     {/* Submenu Items */}
                     {hasSubmenu && (
                       <AnimatePresence>
                         {isExpanded && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
+                            animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
                             <div className="pl-4 pt-3 space-y-2">
@@ -261,66 +415,94 @@ export default function Navbar() {
               })}
 
               <div className="pt-6">
-                <Link
+                <Button
                   href={contactInfo.href}
+                  variant="secondary"
+                  size="lg"
+                  className="border border-white hover:border-white"
                   onClick={toggle}
-                  className="rounded-sm bg-[#3D3D3D] px-9 py-3 text-lg text-white hover:bg-[#575757] transition-colors duration-200"
                 >
                   {contactInfo.label}
-                </Link>
+                </Button>
               </div>
             </div>
           </motion.nav>
         )}
       </AnimatePresence>
 
-      {/* DESKTOP NAVIGATION - FIXED: Use Link instead of anchor */}
-      <div 
+      {/* DESKTOP NAVIGATION - Enhanced with better scroll animations */}
+      <div
         ref={containerRef}
-        className="hidden lg:flex-row lg:flex w-[57rem] lg:flex-wrap fixed top-6 left-1/2 z-40 transition-all duration-500 ease-out"
-        style={{ transform: 'translateX(-50%)' }}
+        className="hidden lg:flex fixed top-6 left-1/2 z-40 w-full max-w-4xl px-4"
+        style={{ 
+          transform: "translateX(-50%) translateY(-20px)",
+          opacity: 0,
+          transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+          pointerEvents: "none"
+        }}
         onMouseLeave={handleMouseLeave}
       >
         <nav
           ref={navRef}
-          className="flex items-center rounded-xl px-8 py-4 bg-[#1E1F1F]"
+          className="flex items-center flex-row justify-between rounded-xl px-4 py-3 bg-[#1E1F1F]/95 backdrop-blur-md w-full shadow-lg border border-white/10"
         >
-          <Logo
-            width={160}
-            height={36}
-            className="h-9 w-auto flex-shrink-0"
-            priority
-            isLink={true}
-            href="/"
-          />
+          <div className="flex-shrink-0">
+            <Logo
+              className="w-auto object-contain scale-75 mb-[-5px] ml-[-10px]"
+              priority
+              isLink={true}
+              href="/"
+            />
+          </div>
 
-          <ul className="ml-8 flex items-center space-x-10">
-            {navLinks.map((item) => (
-              <li 
-                key={item}
-                onMouseEnter={() => handleMouseEnter(item)}
-                className="relative"
-              >
-                <Link
-                  ref={(el) => linkRefs.current[item] = el}
-                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                  className="relative text-sm font-light tracking-wide text-white/85 hover:text-white transition-colors duration-200 group whitespace-nowrap"
+          <div className="flex flex-row items-center ml-auto">
+            <ul className="flex items-center space-x-4 xl:space-x-6">
+              {navLinks.map((item) => (
+                <li
+                  key={item}
+                  onMouseEnter={() => handleMouseEnter(item)}
+                  className="relative"
                 >
-                  {item}
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full" />
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  <Link
+                    ref={(el) => (linkRefs.current[item] = el)}
+                    href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                    className="relative text-xs font-light tracking-wide text-white/85 hover:text-white transition-colors duration-200 group whitespace-nowrap flex items-center gap-1"
+                  >
+                    {item}
+                    {menuData[item] && menuData[item].length > 0 && (
+                      <svg
+                        className="w-3 h-3 text-white/60 group-hover:text-white transition-colors duration-200"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    )}
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
 
-          <Link
-            href={contactInfo.href}
-            className="ml-8 rounded-lg h-full bg-[#3D3D3D] px-7 py-2.5 text-sm font-light tracking-wide text-white hover:bg-[#575757] transition-colors duration-200 flex-shrink-0"
-          >
-            {contactInfo.label}
-          </Link>
+            <Button
+              href={contactInfo.href}
+              variant="secondary"
+              size="sm"
+              className="ml-6 xl:ml-8 border border-white hover:border-white text-xs flex-shrink-0"
+            >
+              {contactInfo.label}
+            </Button>
+          </div>
         </nav>
       </div>
+
+      {/* DROPDOWN MENU */}
       <AnimatePresence>
         {activeDropdown && menuData[activeDropdown] && (
           <motion.div
@@ -330,38 +512,34 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="hidden lg:block fixed z-30 rounded-xl p-2 shadow-2xl bg-[#1E1F1F]"
-            style={{ 
+            className="hidden lg:block fixed z-30 rounded-xl p-2 shadow-2xl bg-[#1E1F1F]/95 backdrop-blur-md border border-white/10"
+            style={{
               left: dropdownPosition.left,
               top: dropdownPosition.top,
-              width: '1000px'
+              width: dropdownPosition.width,
             }}
-            onMouseEnter={() => {
-              setActiveDropdown(activeDropdown)
-              document.body.style.overflow = 'hidden'
-            }}
-            onMouseLeave={() => {
-              handleMouseLeave()
-              document.body.style.overflow = 'auto'
-            }}
+            onMouseEnter={() => setActiveDropdown(activeDropdown)}
+            onMouseLeave={handleMouseLeave}
           >
             <div className="relative">
               <div
-                ref={(el) => scrollRefs.current[activeDropdown] = el}
+                ref={(el) => (scrollRefs.current[activeDropdown] = el)}
                 className="flex gap-2 overflow-x-auto scrollbar-hide"
-                style={{ 
-                  scrollbarWidth: 'none', 
-                  msOverflowStyle: 'none',
-                  paddingLeft: '2px',
-                  paddingRight: '2px',
-                  paddingBottom: '2px',
+                style={{
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                  paddingLeft: "4px",
+                  paddingRight: "4px",
+                  paddingBottom: "2px",
+                  // Enable smooth scrolling
+                  scrollBehavior: "smooth",
                 }}
                 onWheel={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  const container = e.currentTarget
-                  const scrollAmount = e.deltaY * 2
-                  container.scrollLeft += scrollAmount
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const container = e.currentTarget;
+                  const scrollAmount = e.deltaY * 2;
+                  container.scrollLeft += scrollAmount;
                 }}
               >
                 {menuData[activeDropdown].map((subItem) => (
@@ -371,16 +549,16 @@ export default function Navbar() {
                     className="flex-shrink-0 w-80 group cursor-pointer"
                   >
                     <div className="relative h-72 rounded-lg overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-[1.006] hover:shadow-xl">
-                      <div 
+                      <div
                         className="absolute inset-0 bg-cover bg-center bg-gray-600 transition-transform duration-300 group-hover:scale-110"
                         style={{ backgroundImage: `url(${subItem.image})` }}
                       />
-                      
+
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      
+
                       <div className="absolute inset-0 p-6 flex flex-col justify-end">
                         <div className="flex items-end justify-between">
-                          <div className="flex-1 mr-4">
+                          <div className="flex-1">
                             <h3 className="text-white font-semibold text-sm mb-1 leading-tight">
                               {subItem.title}
                             </h3>
@@ -388,17 +566,21 @@ export default function Navbar() {
                               {subItem.description}
                             </p>
                           </div>
-                          
+
                           <div className="flex-shrink-0">
                             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-all duration-200 p-4">
-                              <svg 
-                                className="w-8 h-8 text-white transition-transform duration-200 group-hover:scale-110" 
-                                fill="none" 
-                                stroke="currentColor" 
+                              <svg
+                                className="w-8 h-8 text-white transition-transform duration-200 group-hover:scale-110"
+                                fill="none"
+                                stroke="currentColor"
                                 viewBox="0 0 24 24"
                                 strokeWidth={2}
                               >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17" />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M7 17L17 7M17 7H7M17 7V17"
+                                />
                               </svg>
                             </div>
                           </div>
@@ -413,5 +595,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }

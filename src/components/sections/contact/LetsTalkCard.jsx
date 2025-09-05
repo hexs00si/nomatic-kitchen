@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, MessageCircle } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function LetsTalkCard() {
   const [formData, setFormData] = useState({
@@ -136,18 +136,18 @@ export default function LetsTalkCard() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="flex items-center justify-center p-1">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-6xl"
+        className="w-full h-full"
       >
         {/* Enhanced card with improved red border animation */}
-        <div className="relative rounded-3xl p-1 shadow-2xl">
+        <div className="relative rounded-xl p-1 shadow-2xl h-full">
           {/* Animated border with consistent red theme */}
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-r from-[#EB1B26] via-[#FF4757] to-[#EB1B26] rounded-3xl opacity-75 blur-sm"
+          {/* <motion.div 
+            className="absolute inset-0 bg-gradient-to-r from-[#EB1B26] via-[#FF4757] to-[#EB1B26] rounded-xl opacity-75 blur-sm"
             animate={{ 
               background: [
                 "linear-gradient(0deg, #EB1B26, #FF4757, #EB1B26)",
@@ -158,11 +158,14 @@ export default function LetsTalkCard() {
               ]
             }}
             transition={{ duration: 3, repeat: Infinity }}
-          />
+          /> */}
+
+
+            {/* Removed the above animated border for a cleaner look */}
           
           {/* Main card with improved gradient */}
           <div 
-            className="relative rounded-3xl overflow-hidden"
+            className="relative rounded-xl overflow-hidden h-full"
             style={{
               background: 'linear-gradient(135deg, #383838 0%, #1F1E1E 100%)'
             }}
