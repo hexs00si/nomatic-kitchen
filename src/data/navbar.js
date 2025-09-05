@@ -2,7 +2,8 @@
 export const navLinks = [
   'Home', 
   'Kitchen', 
-  'Wardrobe', 
+  'Wardrobe',
+  'Furniture', 
   'Products', 
   'Gallery', 
   'About'
@@ -84,36 +85,6 @@ export const menuData = {
       image: '/images/service-3.jpg', 
       href: '/services/maintenance',
       description: 'Explore our premium maintenance collection'
-    },
-  ],
-  'Gallery': [
-    { 
-      id: 1, 
-      title: 'Recent Projects', 
-      image: '/images/gallery-1.jpg', 
-      href: '/gallery/recent',
-      description: 'Explore our premium recent projects collection'
-    },
-    { 
-      id: 2, 
-      title: 'Kitchen Gallery', 
-      image: '/images/gallery-2.jpg', 
-      href: '/gallery/kitchen',
-      description: 'Explore our premium kitchen gallery collection'
-    },
-    { 
-      id: 3, 
-      title: 'Wardrobe Gallery', 
-      image: '/images/gallery-3.jpg', 
-      href: '/gallery/wardrobe',
-      description: 'Explore our premium wardrobe gallery collection'
-    },
-    { 
-      id: 4, 
-      title: 'Living Room', 
-      image: '/images/gallery-4.jpg', 
-      href: '/gallery/living',
-      description: 'Explore our premium living room collection'
     },
   ],
   'About': [
