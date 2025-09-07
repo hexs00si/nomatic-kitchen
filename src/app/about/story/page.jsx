@@ -5,13 +5,12 @@ import FollowUsMarqueeStripe from '@/components/marque-stripes/FollowUsMarqueeSt
 import NomaticMarqueeStripe from '@/components/marque-stripes/NomaticMarqueeStripe'
 import AboutDirectorWords from '@/components/sections/about-story/AboutDirectorWords'
 import AboutStoryFactory from '@/components/sections/about-story/AboutStoryFactory'
-import AboutStoryPageHero from '@/components/sections/about-story/AboutStoryPageHero'
-import HomeMeetNomatic from '@/components/sections/home/HomeMeetNomatic'
+import AboutStoryHero from '@/components/sections/about-story/AboutStoryHero'
 
 const AboutStoryPage = () => {
   return (
     <main className="relative overflow-hidden">
-      <AboutStoryPageHero />
+      <AboutStoryHero />
       <NomaticMarqueeStripe />
       <AboutStoryFactory />
       <FollowUsMarqueeStripe/>

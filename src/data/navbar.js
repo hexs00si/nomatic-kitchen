@@ -1,90 +1,72 @@
 // Navbar navigation links
 export const navLinks = [
   'Home', 
-  'Kitchen', 
-  'Wardrobe',
-  'Furniture', 
-  'Products', 
+  'Our Services', 
+  'Design Pillars',
   'Gallery', 
   'About'
 ];
 
 // Mega menu dropdown data
 export const menuData = {
-  'Wardrobe': [
+  'Our Services': [
     { 
       id: 1, 
-      title: 'Classical Wardrobes', 
-      image: '/images/wardrobe-1.jpg', 
-      href: '/wardrobe/walk-in',
-      description: 'Explore our premium classical wardrobes collection'
-    },
-    { 
-      id: 2, 
-      title: 'Modern Wardrobes', 
-      image: '/images/wardrobe-2.jpg', 
-      href: '/wardrobe/sliding',
-      description: 'Explore our premium modern wardrobes collection'
-    },
-    { 
-      id: 3, 
-      title: 'Neo-Classical Wardrobes', 
-      image: '/images/wardrobe-3.jpg', 
-      href: '/wardrobe/hinged',
-      description: 'Explore our premium neo-classical wardrobes collection'
-    },
-  ],
-  'Kitchen': [
-    { 
-      id: 1, 
-      title: 'Modular Kitchen', 
+      title: 'Kitchens', 
       image: '/images/kitchen-1.jpg', 
-      href: '/kitchen/modular',
-      description: 'Explore our premium modular kitchen collection'
+      href: '/our-services/kitchens',
+      description: 'Premium modular kitchen solutions crafted for your lifestyle'
     },
     { 
       id: 2, 
-      title: 'L-Shaped Kitchen', 
-      image: '/images/kitchen-2.jpg', 
-      href: '/kitchen/l-shaped',
-      description: 'Explore our premium l-shaped kitchen collection'
+      title: 'Wardrobes', 
+      image: '/images/wardrobe-1.jpg', 
+      href: '/our-services/wardrobes',
+      description: 'Elegant storage solutions designed for modern living'
     },
     { 
       id: 3, 
-      title: 'U-Shaped Kitchen', 
-      image: '/images/kitchen-3.jpg', 
-      href: '/kitchen/u-shaped',
-      description: 'Explore our premium u-shaped kitchen collection'
+      title: 'Partitions', 
+      image: '/images/partition-1.jpg', 
+      href: '/our-services/partitions',
+      description: 'Stylish room dividers that maximize space and functionality'
     },
     { 
       id: 4, 
-      title: 'Island Kitchen', 
-      image: '/images/kitchen-4.jpg', 
-      href: '/kitchen/island',
-      description: 'Explore our premium island kitchen collection'
+      title: 'Crafted Corners', 
+      image: '/images/corner-1.jpg', 
+      href: '/our-services/crafted-corners',
+      description: 'Bespoke corner solutions that utilize every inch of space'
+    },
+    { 
+      id: 5, 
+      title: 'Furniture', 
+      image: '/images/furniture-1.jpg', 
+      href: '/our-services/furniture',
+      description: 'Custom furniture pieces that complement your interior design'
     },
   ],
-  'Products': [
+  'Design Pillars': [
     { 
       id: 1, 
-      title: '3D Design', 
-      image: '/images/service-1.jpg', 
-      href: '/services/3d-design',
-      description: 'Explore our premium 3d design collection'
+      title: 'Modern', 
+      image: '/images/modern-design.jpg', 
+      href: '/design/modern',
+      description: 'Contemporary designs with clean lines and minimalist aesthetics'
     },
     { 
       id: 2, 
-      title: 'Installation', 
-      image: '/images/service-2.jpg', 
-      href: '/services/installation',
-      description: 'Explore our premium installation collection'
+      title: 'Classical', 
+      image: '/images/classical-design.jpg', 
+      href: '/design/classical',
+      description: 'Timeless elegance with traditional craftsmanship and details'
     },
     { 
       id: 3, 
-      title: 'Maintenance', 
-      image: '/images/service-3.jpg', 
-      href: '/services/maintenance',
-      description: 'Explore our premium maintenance collection'
+      title: 'Neo-Classical', 
+      image: '/images/neo-classical-design.jpg', 
+      href: '/design/neo-classical',
+      description: 'Perfect blend of classical charm and modern functionality'
     },
   ],
   'About': [
@@ -93,14 +75,14 @@ export const menuData = {
       title: 'Our Story', 
       image: '/images/about-1.jpg', 
       href: '/about/story',
-      description: 'Explore our premium our story collection'
+      description: 'Discover the journey behind Nomatic and our passion for design'
     },
     { 
       id: 2, 
       title: 'Our Team', 
       image: '/images/about-2.jpg', 
       href: '/about/team',
-      description: 'Explore our premium our team collection'
+      description: 'Meet the creative minds crafting your dream spaces'
     },
   ]
 };
