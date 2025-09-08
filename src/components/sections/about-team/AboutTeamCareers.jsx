@@ -105,10 +105,10 @@ const AboutTeamCareers = () => {
               transition={{ duration: 0.2 }}
             >
               <a
-                href="mailto:careers@nomatic.com"
+                href="mailto: info@nomaticluxe.com"
                 className="hover:text-brand-identity transition-colors duration-300"
               >
-                careers@nomatic.com →
+                 info@nomaticluxe.com →
               </a>
             </motion.div>
           </motion.div>
@@ -140,40 +140,6 @@ const AboutTeamCareers = () => {
             style={{ animationDelay: "3s" }}
           />
         </div>
-
-        {/* Minimal Stats Section */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-20 border-t border-gray-200"
-          variants={containerVariants}
-        >
-          {[
-            { value: "25+", label: "Team Members" },
-            { value: "8+", label: "Years Experience" },
-            { value: "5", label: "Open Positions" },
-            { value: "100%", label: "Remote Friendly" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center"
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="text-2xl lg:text-3xl font-light text-brand-identity mb-2"
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                {stat.value}
-              </motion.div>
-              <div className="text-sm text-gray-500 uppercase tracking-wide">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </motion.section>
   );

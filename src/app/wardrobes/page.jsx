@@ -11,18 +11,13 @@ import { wardrobeGalleryData } from '@/data/wardrobeGalleryData';
 const WardrobesPage = () => {
   return (
     <>
-      {/* Hero Section */}
       <GenericHero 
         title={wardrobeHeroData.title}
         images={wardrobeHeroData.images}
         height="90vh"
         showCursor={true}
       />
-      
-      {/* Marquee Stripe */}
       <NomaticMarqueeStripe />
-      
-      {/* Stacking Cards Section */}
       <WardrobeStackingCards 
         cards={wardrobeFinishesData}
         introTitle={wardrobeIntroData.title}

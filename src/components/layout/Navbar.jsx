@@ -14,6 +14,9 @@ export default function Navbar() {
   const [mobileExpandedItems, setMobileExpandedItems] = useState({});
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [scrollDirection, setScrollDirection] = useState('up');
+  const [showScrollButtons, setShowScrollButtons] = useState({});
+  const [canScrollLeft, setCanScrollLeft] = useState({});
+  const [canScrollRight, setCanScrollRight] = useState({});
   
   const navRef = useRef(null);
   const containerRef = useRef(null);
@@ -209,10 +212,25 @@ export default function Navbar() {
   }, [activeDropdown]);
 
   /* -------------------------------------------------- scroll functions */
+  const checkScrollCapability = (menuKey) => {
+    const container = scrollRefs.current[menuKey];
+    if (container) {
+      const canScrollLeftValue = container.scrollLeft > 0;
+      const canScrollRightValue = container.scrollLeft < container.scrollWidth - container.clientWidth;
+      
+      setCanScrollLeft(prev => ({ ...prev, [menuKey]: canScrollLeftValue }));
+      setCanScrollRight(prev => ({ ...prev, [menuKey]: canScrollRightValue }));
+      
+      // Show scroll buttons if there's content to scroll
+      const hasScrollableContent = container.scrollWidth > container.clientWidth;
+      setShowScrollButtons(prev => ({ ...prev, [menuKey]: hasScrollableContent }));
+    }
+  };
+
   const scroll = (direction, menuKey) => {
     const container = scrollRefs.current[menuKey];
     if (container) {
-      const scrollAmount = 280;
+      const scrollAmount = 320; // Increased to match card width + gap
       const newScrollLeft =
         direction === "left"
           ? container.scrollLeft - scrollAmount
@@ -222,6 +240,9 @@ export default function Navbar() {
         left: newScrollLeft,
         behavior: "smooth",
       });
+      
+      // Update scroll button states after scrolling
+      setTimeout(() => checkScrollCapability(menuKey), 300);
     }
   };
 
@@ -243,6 +264,8 @@ export default function Navbar() {
   const handleMouseEnter = (item) => {
     if (menuData[item]) {
       setActiveDropdown(item);
+      // Check scroll capabilities after dropdown is rendered
+      setTimeout(() => checkScrollCapability(item), 100);
     }
   };
 
@@ -522,24 +545,84 @@ export default function Navbar() {
             onMouseLeave={handleMouseLeave}
           >
             <div className="relative">
+              {/* Left Scroll Arrow */}
+              {showScrollButtons[activeDropdown] && canScrollLeft[activeDropdown] && (
+                <motion.button
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  onClick={() => scroll("left", activeDropdown)}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-brand-identity/90 hover:bg-brand-identity rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 group"
+                  aria-label="Scroll left"
+                >
+                  <svg
+                    className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </motion.button>
+              )}
+
+              {/* Right Scroll Arrow */}
+              {showScrollButtons[activeDropdown] && canScrollRight[activeDropdown] && (
+                <motion.button
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  onClick={() => scroll("right", activeDropdown)}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-brand-identity/90 hover:bg-brand-identity rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 group"
+                  aria-label="Scroll right"
+                >
+                  <svg
+                    className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </motion.button>
+              )}
+
               <div
-                ref={(el) => (scrollRefs.current[activeDropdown] = el)}
+                ref={(el) => {
+                  scrollRefs.current[activeDropdown] = el;
+                  // Check scroll capability when ref is set
+                  if (el) {
+                    setTimeout(() => checkScrollCapability(activeDropdown), 50);
+                  }
+                }}
                 className="flex gap-2 overflow-x-auto scrollbar-hide"
                 style={{
                   scrollbarWidth: "none",
                   msOverflowStyle: "none",
-                  paddingLeft: "4px",
-                  paddingRight: "4px",
+                  paddingLeft: showScrollButtons[activeDropdown] && canScrollLeft[activeDropdown] ? "48px" : "4px",
+                  paddingRight: showScrollButtons[activeDropdown] && canScrollRight[activeDropdown] ? "48px" : "4px",
                   paddingBottom: "2px",
-                  // Enable smooth scrolling
                   scrollBehavior: "smooth",
                 }}
+                onScroll={() => checkScrollCapability(activeDropdown)}
                 onWheel={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   const container = e.currentTarget;
                   const scrollAmount = e.deltaY * 2;
                   container.scrollLeft += scrollAmount;
+                  // Update scroll button states after wheel scroll
+                  setTimeout(() => checkScrollCapability(activeDropdown), 100);
                 }}
               >
                 {menuData[activeDropdown].map((subItem) => (
