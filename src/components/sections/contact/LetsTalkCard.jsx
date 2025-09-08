@@ -3,8 +3,15 @@
 import { motion } from "framer-motion"
 import { ArrowRight, MessageCircle } from "lucide-react"
 import { useEffect, useState } from "react"
+import emailjs from '@emailjs/browser';
 
 export default function LetsTalkCard() {
+  // EmailJS Configuration
+  const SERVICE_ID = "service_9g54bzq";
+  const USER_TEMPLATE_ID = "template_7pmi4xl";
+  const BUSINESS_TEMPLATE_ID = "template_rbdhnfb";
+  const PUBLIC_KEY = "V7Ne29_mwK6Z5al9S";
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,11 +21,13 @@ export default function LetsTalkCard() {
 
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success', 'error', or null
+
+  // Typewriter effect state
   const [displayText, setDisplayText] = useState("")
   const [showCursor, setShowCursor] = useState(true)
-  const [isTyping, setIsTyping] = useState(false)
 
-  // Enhanced typewriter effect with looping
+  // Typewriter effect with looping
   useEffect(() => {
     const fullText = "Let's Talk"
     let typewriterInterval
@@ -26,7 +35,6 @@ export default function LetsTalkCard() {
     let loopTimeout
 
     const startTypewriter = () => {
-      setIsTyping(true)
       let index = 0
       
       typewriterInterval = setInterval(() => {
@@ -35,9 +43,7 @@ export default function LetsTalkCard() {
           index++
         } else {
           clearInterval(typewriterInterval)
-          setIsTyping(false)
           
-          // Wait 3 seconds then restart the animation
           loopTimeout = setTimeout(() => {
             setDisplayText("")
             startTypewriter()
@@ -51,7 +57,6 @@ export default function LetsTalkCard() {
       setShowCursor(prev => !prev)
     }, 500)
 
-    // Start the typewriter effect after initial delay
     const initialDelay = setTimeout(startTypewriter, 1000)
 
     return () => {
@@ -65,61 +70,64 @@ export default function LetsTalkCard() {
   const validateForm = () => {
     const newErrors = {}
 
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters"
-    } else if (!/^[A-Za-z\s.'-]+$/.test(formData.name.trim())) {
-      newErrors.name = "Name contains invalid characters"
-    }
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    else if (formData.name.trim().length < 2) newErrors.name = "Name must be at least 2 characters";
+    else if (!/^[A-Za-z\s.'-]+$/.test(formData.name.trim())) newErrors.name = "Name contains invalid characters";
 
-    // Email validation
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
-    } else if (!/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address"
-    }
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) newErrors.email = "Please enter a valid email address";
 
-    // Phone validation
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required"
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\s/g, ""))) {
-      newErrors.phone = "Please enter a valid 10-digit phone number"
-    }
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    else if (!/^\d{10}$/.test(formData.phone.replace(/\s/g, ""))) newErrors.phone = "Please enter a valid 10-digit phone number";
 
-    // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required"
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters"
-    }
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+    else if (formData.message.trim().length < 10) newErrors.message = "Message must be at least 10 characters";
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!validateForm()) return
-    setIsSubmitting(true)
+    e.preventDefault();
+    setSubmissionStatus(null);
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+
+    const businessParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        from_phone: formData.phone,
+        message: formData.message,
+        to_email: 'info@nomaticluxe.com',
+    };
+    
+    const userParams = {
+      to_email: formData.email,
+      from_name: formData.name,
+    };
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log("Form submitted:", formData)
-      setFormData({ name: "", email: "", phone: "", message: "" })
-      setErrors({})
-      alert("Message sent successfully!")
+      // Send email to business owner
+      await emailjs.send(SERVICE_ID, BUSINESS_TEMPLATE_ID, businessParams, PUBLIC_KEY);
+      
+      // Send follow-up email to the user
+      await emailjs.send(SERVICE_ID, USER_TEMPLATE_ID, userParams, PUBLIC_KEY);
+
+      console.log("Emails sent successfully!");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+      setErrors({});
+      setSubmissionStatus('success');
+
     } catch (error) {
-      console.error("Form submission error:", error)
-      alert("Failed to send message. Please try again.")
+      console.error("Form submission error:", error);
+      setSubmissionStatus('error');
+
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   const handleInputChange = (field, value) => {
-    // Special handling for phone number (only allow digits)
     if (field === 'phone') {
       const digitsOnly = value.replace(/\D/g, '')
       if (digitsOnly.length <= 10) {
@@ -129,7 +137,6 @@ export default function LetsTalkCard() {
       setFormData((prev) => ({ ...prev, [field]: value }))
     }
     
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
@@ -143,27 +150,7 @@ export default function LetsTalkCard() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full h-full"
       >
-        {/* Enhanced card with improved red border animation */}
         <div className="relative rounded-xl p-1 shadow-2xl h-full">
-          {/* Animated border with consistent red theme */}
-          {/* <motion.div 
-            className="absolute inset-0 bg-gradient-to-r from-[#EB1B26] via-[#FF4757] to-[#EB1B26] rounded-xl opacity-75 blur-sm"
-            animate={{ 
-              background: [
-                "linear-gradient(0deg, #EB1B26, #FF4757, #EB1B26)",
-                "linear-gradient(90deg, #EB1B26, #FF4757, #EB1B26)",
-                "linear-gradient(180deg, #EB1B26, #FF4757, #EB1B26)",
-                "linear-gradient(270deg, #EB1B26, #FF4757, #EB1B26)",
-                "linear-gradient(360deg, #EB1B26, #FF4757, #EB1B26)"
-              ]
-            }}
-            transition={{ duration: 3, repeat: Infinity }}
-          /> */}
-
-
-            {/* Removed the above animated border for a cleaner look */}
-          
-          {/* Main card with improved gradient */}
           <div 
             className="relative rounded-xl overflow-hidden h-full"
             style={{
@@ -173,7 +160,6 @@ export default function LetsTalkCard() {
             <div className="grid lg:grid-cols-2 min-h-[600px]">
               {/* Left Section - Enhanced Branding */}
               <div className="p-8 lg:p-12 flex flex-col justify-between relative overflow-hidden">
-                {/* Subtle background pattern */}
                 <div className="absolute inset-0 opacity-5">
                   <div 
                     className="w-full h-full" 
@@ -206,14 +192,13 @@ export default function LetsTalkCard() {
                     Your perfect space starts here.
                   </motion.p>
 
-                  {/* Enhanced responsive "Let's Talk" with proper line handling */}
                   <div className="border-t border-gray-600 pt-8">
                     <div className="flex items-center">
                       <motion.h2
                         className="font-bold text-white leading-none whitespace-nowrap"
                         style={{
-                          fontSize: 'clamp(2.5rem, 8vw, 6rem)', // Responsive font size
-                          minHeight: '1.2em' // Prevent layout shift
+                          fontSize: 'clamp(2.5rem, 8vw, 6rem)',
+                          minHeight: '1.2em'
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -235,9 +220,40 @@ export default function LetsTalkCard() {
                 </div>
               </div>
 
-              {/* Right Section - Enhanced Form */}
+              {/* Right Section - Form */}
               <div className="p-8 lg:p-12 bg-black/20 backdrop-blur-sm relative">
-                {/* Enhanced menu icon */}
+                {submissionStatus ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className={`
+                      absolute inset-0 flex flex-col items-center justify-center text-center p-8 rounded-xl
+                      ${submissionStatus === 'success' ? 'bg-green-600/80' : 'bg-red-600/80'}
+                    `}
+                  >
+                    <div className="relative z-10 text-white">
+                      <MessageCircle className="h-16 w-16 mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold">
+                        {submissionStatus === 'success' ? 'Message Sent!' : 'Error!'}
+                      </h3>
+                      <p className="mt-2 text-sm sm:text-base">
+                        {submissionStatus === 'success'
+                          ? "Thank you for contacting Nomatic Luxe. We'll be in touch shortly."
+                          : "Failed to send message. Please try again later."}
+                      </p>
+                      <motion.button
+                        onClick={() => setSubmissionStatus(null)}
+                        className="mt-4 px-4 py-2 rounded-full border border-white text-white text-sm"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        Close
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                ) : null}
+
                 <div className="absolute top-6 right-6">
                   <motion.button
                     type="button"
@@ -256,21 +272,17 @@ export default function LetsTalkCard() {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="h-full flex flex-col"
                 >
-                  {/* Form header with responsive flex for mobile - REMOVED redundant icon */}
                   <div className="mb-8">
                     <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <h3 className="text-xl sm:text-2xl font-semibold text-white">
                         Prefer Planning Ahead ?
                       </h3>
-                      {/* REMOVED: The redundant rotating MessageCircle icon */}
                     </div>
                     <p className="text-gray-400 text-sm sm:text-base mt-2">We welcome your questions and feedback</p>
                   </div>
 
-                  {/* Enhanced form with spacing animations */}
                   <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
                     <div className="space-y-6 flex-1">
-                      {/* Name Field with hover animation */}
                       <motion.div
                         whileHover={{ y: -2 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -302,7 +314,6 @@ export default function LetsTalkCard() {
                         )}
                       </motion.div>
 
-                      {/* Email Field with hover animation */}
                       <motion.div
                         whileHover={{ y: -2 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -334,7 +345,6 @@ export default function LetsTalkCard() {
                         )}
                       </motion.div>
 
-                      {/* Phone Field with hover animation */}
                       <motion.div
                         whileHover={{ y: -2 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -367,7 +377,6 @@ export default function LetsTalkCard() {
                         )}
                       </motion.div>
 
-                      {/* Message Field with hover animation */}
                       <motion.div
                         whileHover={{ y: -2 }}
                         transition={{ type: "spring", stiffness: 300 }}
@@ -400,9 +409,7 @@ export default function LetsTalkCard() {
                       </motion.div>
                     </div>
 
-                    {/* Enhanced form footer */}
                     <div className="flex items-center justify-between mt-8">
-                      {/* Corrected color dots: #EB1B26, #FFFFFF, #FFFFFF */}
                       <div className="flex space-x-3">
                         <motion.div 
                           className="w-4 h-4 bg-[#EB1B26] rounded-full"
@@ -421,7 +428,6 @@ export default function LetsTalkCard() {
                         />
                       </div>
 
-                      {/* Enhanced submit button */}
                       <motion.button
                         type="submit"
                         disabled={isSubmitting}
