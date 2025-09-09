@@ -1,19 +1,19 @@
 export const footerData = {
   contactUs: {
     title: "Contact Us",
-    phone: "+91 99886-56111",
-    email: "info@nomatic.co.in",
+    phone: "+91 9988111454",
+    email: "info@nomaticluxe.com",
     showroomDirections: {
       text: "Showroom Directions",
-      link: "/showroom-directions",
+      link: "/contact/#find-showroom",
     },
   },
   services: {
-    title: "Services",
+    title: "Products",
     items: [
-      { text: "Modular Kitchen", link: "/services/modular-kitchen" },
-      { text: "Wardrobes", link: "/services/wardrobes" },
-      { text: "Bathroom Solutions", link: "/services/bathroom-solutions" },
+      { text: "Kitchen", link: "/kitchens" },
+      { text: "Wardrobes", link: "/wardrobes" },
+      { text: "Furniture", link: "/furniture" },
     ],
   },
   visitAndInfo: {
@@ -27,9 +27,9 @@ export const footerData = {
   connectAndFollow: {
     title: "Connect and Follow",
     items: [
-      { text: "Whatsapp", link: "https://wa.me/919988656111" },
-      { text: "Instagram", link: "https://instagram.com/nomatic" },
-      { text: "Newsletter", link: "/newsletter" },
+      { text: "Whatsapp", link: "https://wa.me/9988111454" },
+      { text: "Instagram", link: "https://www.instagram.com/nomaticluxe/" },
+      { text: "Linkedin", link: "https://www.linkedin.com/company/nomatic-luxe/" },
     ],
   },
   copyright: "Copyrights 2025 by nomatic.com",

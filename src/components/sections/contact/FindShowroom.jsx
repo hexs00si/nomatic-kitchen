@@ -75,7 +75,7 @@ export default function FindShowroomSection() {
                     Plot No. 11, JLPL,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-gray-700 font-medium">
-                    Industrial Park Sector 82,
+                    Industrial Area Sector 82,
                   </p>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold">
                     <span className="text-[#EB1B26]">Mohali, Punjab</span> 
